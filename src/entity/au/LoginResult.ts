@@ -1,14 +1,8 @@
 import type LonginResultUser from '@/entity/au/LonginResultUser'
 
+interface LoginResult {
 
-export default class LoginResult {
+   identityKey: string
 
-  constructor(identityKey: string, users: Array<LonginResultUser>) {
-    this.identityKey = identityKey
-    this.users = users
-  }
-
-  public identityKey: string
-
-  public users: Array<LonginResultUser>
+   users: Array<LonginResultUser>
 }

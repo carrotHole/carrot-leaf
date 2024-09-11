@@ -1,5 +1,6 @@
-<script setup lang="ts">
-  import Header from '@/views/layout/component/header.vue'
+  <script setup lang="ts">
+  import Header from '@/views/layout/component/Header.vue'
+  import Aside from '@/views/layout/component/Aside.vue'
 </script>
 
 <template>
@@ -9,7 +10,9 @@
         <Header></Header>
       </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
+        <el-aside width="220px">
+          <Aside></Aside>
+        </el-aside>
         <el-container>
           <el-main>Main</el-main>
           <el-footer>Footer</el-footer>
@@ -20,7 +23,7 @@
 </template>
 
 <style scoped>
-.el-header{
+.el-header {
   padding: 0;
 }
 </style>

@@ -36,7 +36,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
 
 <style scoped>
 .layout-header {
-  border-bottom: 1px solid antiquewhite;
+  border-bottom: 1px solid var(--carrot-hdeader-bg-color);
   justify-content: space-between;
   display: flex;
   height: 55px;
@@ -47,7 +47,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
     display: flex;
     .layout-header-title {
       width: 220px;
-      background-color: antiquewhite;
+      background-color: var(--carrot-hdeader-bg-color);
 
       .layout-header-title-logo {
         width: 40px;
@@ -57,7 +57,8 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
       }
 
       .layout-header-title-name {
-        color: #006622;
+        color: #D14104;
+        //color: #006622;
         font-size: 30px;
         font-weight: bold;
         margin-left: 10px;
@@ -73,6 +74,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
       align-items: center;
 
       .el-button {
+        font-size: 20px;
         width: 55px;
         height: 54px;
       }
@@ -89,6 +91,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
       justify-content: center;
       align-items: center;
       .el-button {
+        font-size: 20px;
         width: 55px;
         height: 54px;
       }
@@ -108,7 +111,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
       .layout-header-avatar-name {
         font-size: 20px;
         margin-left: 10px;
-        line-height: 60px;
+        line-height: 55px;
         vertical-align: middle;
         display: inline-block;
       }

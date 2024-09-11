@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/ui',
       name: 'ui',
-      component: () => import('../views/layout/layoutIndex.vue')
+      component: () => import('../views/layout/LayoutIndex.vue')
     }
   ]
 })

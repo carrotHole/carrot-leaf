@@ -3,9 +3,7 @@
 </script>
 
 <template>
-  <el-scrollbar>
-
-  </el-scrollbar>
+menu
 </template>
 
 <style scoped>

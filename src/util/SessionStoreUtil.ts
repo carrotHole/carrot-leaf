@@ -1,3 +1,5 @@
+import router from '@/router'
+
 /**
  * sessionStorage工具类
  */
@@ -32,7 +34,15 @@ export default class SessionStoreUtil {
    * 获取token
    */
   static getToken() : string {
-    return sessionStorage.getItem('token') as string
+    // todo 如果token为null ，则跳转登录页面
+    const token = sessionStorage.getItem('token')
+
+    if (token == null) {
+      // 跳转登录页
+      router.push('/login')
+      return
+    }
+    return token as string
   }
 
 
