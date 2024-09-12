@@ -36,7 +36,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
 
 <style scoped>
 .layout-header {
-  border-bottom: 1px solid var(--carrot-hdeader-bg-color);
+  border-bottom: 1px solid var(--carrot-color-17);
   justify-content: space-between;
   display: flex;
   height: 55px;
@@ -47,7 +47,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
     display: flex;
     .layout-header-title {
       width: 220px;
-      background-color: var(--carrot-hdeader-bg-color);
+      background-color: var(--carrot-color-17);
 
       .layout-header-title-logo {
         width: 40px;
