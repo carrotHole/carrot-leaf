@@ -1,6 +1,7 @@
   <script setup lang="ts">
   import Header from '@/views/layout/component/Header.vue'
   import Aside from '@/views/layout/component/Aside.vue'
+  import Footer from '@/views/layout/component/Footer.vue'
 </script>
 
 <template>
@@ -15,7 +16,9 @@
         </el-aside>
         <el-container>
           <el-main>Main</el-main>
-          <el-footer>Footer</el-footer>
+          <el-footer>
+            <Footer/>
+          </el-footer>
         </el-container>
       </el-container>
     </el-container>
@@ -25,5 +28,18 @@
 <style scoped>
 .el-header {
   padding: 0;
+  height: var(--carrot-header-height);
+}
+.el-footer {
+  height: var(--carrot-footer-height);
+}
+.el-main {
+  height: calc(100vh - var(--carrot-header-height) - var(--carrot-footer-height));
+  min-height: var(--carrot-main-height);
+}
+.el-aside {
+  height: calc(100vh - var(--carrot-header-height));
+  min-height: calc(var(--carrot-main-height) + var(--carrot-footer-height));
+  background-color: var(--carrot-menu-bg-color);
 }
 </style>

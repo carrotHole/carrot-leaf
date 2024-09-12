@@ -4,8 +4,9 @@
   --carrot-hdeader-bg-color: #FFDBAA;
   --carrot-menu-bg-color: #FDE3C0;
 
-  --el-header-height: 55px;
-
+  --carrot-header-height: 55px;
+  --carrot-footer-height: 20px;
+  --carrot-main-height: 400px;
 
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;

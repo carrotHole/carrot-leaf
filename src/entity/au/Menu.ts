@@ -48,7 +48,7 @@ interface Menu {
   createdBy?: string;
 
   // 菜单类型
-  menuType?: string;
+  menuType?: number;
 
   // 主键
   id?: string;

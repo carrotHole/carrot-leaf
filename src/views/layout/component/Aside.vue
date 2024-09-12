@@ -20,6 +20,22 @@ const menuTree = ref<Menu[]>([
         menuType: 2,
         id: '11',
         children: []
+      },
+      {
+        menuName: '角色',
+        icon: 'Discount',
+        permissionCode: '',
+        menuType: 2,
+        id: '12',
+        children: []
+      },
+      {
+        menuName: '部门',
+        icon: 'OfficeBuilding',
+        permissionCode: '',
+        menuType: 2,
+        id: '13',
+        children: []
       }
     ]
   },
@@ -78,11 +94,20 @@ const menuTree = ref<Menu[]>([
 
 <style scoped>
 .el-menu-item.is-active {
-  background-color: #F8AA42 !important;
+  background-color: #EFF3FE ;
 }
 .el-menu {
   background: var(--carrot-menu-bg-color);
 }
+.el-menu-item {
+  background-color: #FDD194;
+}
 
+.el-menu-item:hover{
+  background-color: #EFF3FE;
+}
+.el-sub-menu__title:hover{
+  background-color: #FFF5E5;
+}
 
 </style>
