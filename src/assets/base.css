@@ -26,9 +26,12 @@
   --carrot-color-15: #FFDEAD;
   --carrot-color-16: #FFE4C4;
   --carrot-color-17: #FFEFD5;
-  --carrot-color-19: #FDF5E6;
-  --carrot-color-20: #FFF5EE;
-  --carrot-color-21: #FFFAF0;
+  --carrot-color-18: #FDF5E6;
+  --carrot-color-19: #FFF5EE;
+  --carrot-color-20: #FFFAF0;
+
+  --carrot-color-login-left: #FFDEAD;
+  --carrot-color-login-right: #F5DEB3;
 
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;

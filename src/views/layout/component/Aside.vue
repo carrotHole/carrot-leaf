@@ -94,14 +94,13 @@ const menuTree = ref<Menu[]>([
 
 <style scoped>
 .el-menu-item.is-active {
-  background-color: #EFF3FE ;
-  background-color: var(--carrot-color-17) !important;
+  background-color: var(--carrot-color-16);
 }
 .el-menu {
-  background: var(--carrot-color-17);
+  background: var(--carrot-color-19);
 }
 .el-menu-item {
-  background-color: #FDD194;
+  background-color: var(--carrot-color-18);
 }
 
 .el-menu-item:hover{

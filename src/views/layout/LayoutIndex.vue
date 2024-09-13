@@ -43,6 +43,6 @@
 .el-aside {
   height: calc(100vh - var(--carrot-header-height));
   min-height: calc(var(--carrot-main-height) + var(--carrot-footer-height));
-  background-color: var(--carrot-menu-bg-color);
+  background-color: var(--carrot-color-19);
 }
 </style>
