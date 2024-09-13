@@ -95,9 +95,10 @@ const menuTree = ref<Menu[]>([
 <style scoped>
 .el-menu-item.is-active {
   background-color: #EFF3FE ;
+  background-color: var(--carrot-color-17) !important;
 }
 .el-menu {
-  background: var(--carrot-menu-bg-color);
+  background: var(--carrot-color-17);
 }
 .el-menu-item {
   background-color: #FDD194;

@@ -1,8 +1,9 @@
   <script setup lang="ts">
   import Header from '@/views/layout/component/Header.vue'
   import Aside from '@/views/layout/component/Aside.vue'
+  import Main from '@/views/layout/component/Main.vue'
   import Footer from '@/views/layout/component/Footer.vue'
-</script>
+  </script>
 
 <template>
   <div class="common-layout">
@@ -15,7 +16,9 @@
           <Aside></Aside>
         </el-aside>
         <el-container>
-          <el-main>Main</el-main>
+          <el-main>
+            <Main></Main>
+          </el-main>
           <el-footer>
             <Footer/>
           </el-footer>
