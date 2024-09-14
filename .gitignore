@@ -30,3 +30,5 @@ coverage
 *.tsbuildinfo
 /components.d.ts
 /vite.config.ts.timestamp-*.mjs
+/auto-imports.d.ts
+/pnpm-lock.yaml
