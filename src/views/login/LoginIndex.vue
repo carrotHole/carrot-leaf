@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import {login} from '@/api/login'
+import router from '@/router'
+import {loginRequest, getToken} from '@/api/loginRequest'
+import MessageUtil from '@/util/MessageUtil'
+import SessionStoreUtil from '@/util/SessionStoreUtil'
 
 const loginEntity = ref<Login>({
   username: '',
   password: '',
   rememberMe: 0,
   loginType: 1,
-  tenantMark: '',
+  tenantMark: 'carrot',
   passwordEnc: undefined,
   captcha: undefined,
   captchaKey: undefined
@@ -15,9 +18,32 @@ const loginEntity = ref<Login>({
 
 // 跳到当前页面后 自动调用方法login,并设置token,并跳转到首页
 const handleLogin = async () => {
-  let res = await login(loginEntity.value)
-  console.log(res)
+  const { data } = await loginRequest(loginEntity.value)
+  let tokenValue = undefined
+
+  if (!data || data.users.length ==  0 ){
+    MessageUtil.error('登录异常，请联系管理员')
+    return
+  }
+
+  if (data.users.length == 1){
+    console.log(data)
+
+    // 用户名对应一个账号,直接获取token
+    const longinResultUser = data.users[0]
+    const tokenRes = await getToken(data.identifyKey, longinResultUser.deptId)
+    tokenValue = tokenRes.data
+  }else {
+    // todo 多个账号
+
+  }
+
+  // 缓存token
+  SessionStoreUtil.setToken(tokenValue)
+  await router.push("/layout")
 }
+
+
 const handleSubmit = () => {
 
 }

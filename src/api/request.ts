@@ -1,6 +1,7 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import SessionStoreUtil from '@/util/sessionStoreUtil'
+import MessageUtil from '@/util/MessageUtil'
 
 class AxiosService {
   private instance: AxiosInstance;
@@ -15,7 +16,9 @@ class AxiosService {
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         // 在发送请求之前做些什么
+        console.log(config.url)
         // 添加token到headers
+        console.log(SessionStoreUtil.getToken())
         config.headers['Authorization'] = SessionStoreUtil.getToken();
         return config;
       },
@@ -29,7 +32,12 @@ class AxiosService {
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => {
         // 对响应数据做点什么
-        // 例如，你可以直接返回response.data
+        if (response.data.code !== 200) {
+          // 提示错误信息
+          MessageUtil.error(response.data.msg);
+          // 中断返回
+          return Promise.reject(response.data);
+        }
         return response.data;
       },
       (error) => {

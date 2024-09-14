@@ -1,7 +1,13 @@
 <script setup lang="ts">
 
 import { Bell, Fold, Menu } from '@element-plus/icons-vue'
+import { logoutRequest } from '@/api/loginRequest'
+import router from '@/router'
 
+const handleLogout = async () => {
+  await logoutRequest()
+  router.push('/login')
+}
 
 // todo 动态加载logo,title
 </script>
@@ -26,7 +32,7 @@ import { Bell, Fold, Menu } from '@element-plus/icons-vue'
       </div>
       <div class="layout-header-avatar">
         <img class="layout-header-avatar-img" src="@/assets/avatar.png" alt="avatar" />
-        <div class="layout-header-avatar-name">管理员</div>
+        <div class="layout-header-avatar-name" @click="handleLogout">管理员</div>
       </div>
 
     </div>

@@ -6,8 +6,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'layout',
+      component: () => import('../views/layout/LayoutIndex.vue')
+    },
+    {
+      path: '/layout',
+      name: 'layout',
+      component: () => import('../views/layout/LayoutIndex.vue')
     },
     {
       path: '/about',
@@ -17,11 +22,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
-    {
-      path: '/ui',
-      name: 'ui',
-      component: () => import('../views/layout/LayoutIndex.vue')
-    },
+
     {
       path: '/login',
       name: 'login',

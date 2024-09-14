@@ -2,7 +2,7 @@ import type LonginResultUser from '@/entity/au/LonginResultUser'
 
 interface LoginResult {
 
-   identityKey: string
+   identifyKey: string
 
    users: Array<LonginResultUser>
 }
