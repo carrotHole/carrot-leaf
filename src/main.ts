@@ -12,9 +12,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 读取配置文件
 import config from './config.json';
-(window as any).appConfig = config;
 
 const app = createApp(App)
+
+app.config.globalProperties.$config = config;
 
 app.use(createPinia())
 app.use(router)

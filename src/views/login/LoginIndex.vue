@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'Vue'
+import { ref } from 'vue'
+import {login} from '@/api/login'
 
 const loginEntity = ref<Login>({
   username: '',
@@ -13,8 +14,9 @@ const loginEntity = ref<Login>({
 })
 
 // 跳到当前页面后 自动调用方法login,并设置token,并跳转到首页
-const login = async () => {
-
+const handleLogin = async () => {
+  let res = await login(loginEntity.value)
+  console.log(res)
 }
 const handleSubmit = () => {
 
@@ -39,7 +41,7 @@ const signup = () => {
           <label for="password">密码:</label>
           <input type="password" id="password" v-model="loginEntity.password" required />
         </div>
-        <button type="submit">登录</button>
+        <button type="submit" @click="handleLogin">登录</button>
       </form>
       <!--      <p>-->
       <!--        ?-->

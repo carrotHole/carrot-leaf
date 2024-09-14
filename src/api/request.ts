@@ -1,49 +1,70 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios from 'axios'
+import SessionStoreUtil from '@/util/sessionStoreUtil'
 
-const whiteList = ['/login', '/register'];
+class AxiosService {
+  private instance: AxiosInstance;
 
-// 创建一个 Axios 实例
-const instance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_BASE_URL || 'https://api.example.com',
-  timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+  constructor(baseURL: string) {
+    this.instance = axios.create({
+      baseURL,
+      timeout: 10000, // 设置超时时间
+    });
 
-// 添加请求拦截器
-instance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    // 在发送请求之前做一些事情，例如添加 token
-    if (whiteList.includes(config.url)) {
-      return config;
-    }
-    // 设置token
-    config.headers.Authorization = SessionStoreUtil.getToken();
-    return config;
-  },
-  (error) => {
-    // 处理请求错误
-    return Promise.reject(error);
+    // 请求拦截器
+    this.instance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        // 在发送请求之前做些什么
+        // 添加token到headers
+        config.headers['Authorization'] = SessionStoreUtil.getToken();
+        return config;
+      },
+      (error) => {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+      }
+    );
+
+    // 响应拦截器
+    this.instance.interceptors.response.use(
+      (response: AxiosResponse) => {
+        // 对响应数据做点什么
+        // 例如，你可以直接返回response.data
+        return response.data;
+      },
+      (error) => {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+      }
+    );
   }
-);
 
-// 添加响应拦截器
-instance.interceptors.response.use(
-  (response) => {
-    // 对响应数据做些处理
-    return response.data;
-  },
-  (error) => {
-    // 处理响应错误
-    return Promise.reject(error);
+  // GET请求
+  public get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.instance.get(url, config);
   }
-);
 
-// 定义请求方法
-export const request = {
-  get: (url: string, params?: any) => instance.get(url, { params }),
-  post: (url: string, data?: any) => instance.post(url, data),
-  put: (url: string, data?: any) => instance.put(url, data),
-  delete: (url: string, data?: any) => instance.delete(url, { data }),
-};
+  // POST请求
+  public post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return this.instance.post(url, data, config);
+  }
+
+  // PUT请求
+  public put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return this.instance.put(url, data, config);
+  }
+
+  // PATCH请求
+  public patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return this.instance.patch(url, data, config);
+  }
+
+  // DELETE请求
+  public delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.instance.delete(url, config);
+  }
+}
+
+const request = new AxiosService('');
+
+export default request;
