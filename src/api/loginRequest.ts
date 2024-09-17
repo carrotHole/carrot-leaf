@@ -18,7 +18,7 @@ export const getToken = (identifyKey: string, deptId: string) => {
  * 获取用户信息
  */
 export const getUserInfo = () => {
-  return request.post(`${baseURL}/user`)
+  return request.get(`${baseURL}/user`)
 }
 
 /**

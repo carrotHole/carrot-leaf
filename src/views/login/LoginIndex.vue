@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import router from '@/router'
 import {loginRequest, getToken} from '@/api/loginRequest'
 import MessageUtil from '@/util/MessageUtil'
@@ -14,6 +14,14 @@ const loginEntity = ref<Login>({
   passwordEnc: undefined,
   captcha: undefined,
   captchaKey: undefined
+})
+
+onMounted (()=>{
+  // 获取token
+  const token = SessionStoreUtil.getToken()
+  if (token) {
+     router.push("/")
+  }
 })
 
 // 跳到当前页面后 自动调用方法login,并设置token,并跳转到首页
@@ -40,7 +48,7 @@ const handleLogin = async () => {
 
   // 缓存token
   SessionStoreUtil.setToken(tokenValue)
-  await router.push("/layout")
+  await router.push("/")
 }
 
 

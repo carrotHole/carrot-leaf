@@ -45,6 +45,9 @@ export default class SessionStoreUtil {
     return token as string
   }
 
+  static logout() :void {
+    sessionStorage.removeItem('token')
+  }
 
   /**
    * 清空sessionStorage

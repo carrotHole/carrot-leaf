@@ -1,26 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import CommonLayout from '@/views/layout/LayoutIndex.vue' // 引入你的布局组件
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'layout',
-      component: () => import('../views/layout/LayoutIndex.vue')
+      redirect: '/layout' // 默认重定向到/home路由
     },
     {
       path: '/layout',
       name: 'layout',
-      component: () => import('../views/layout/LayoutIndex.vue')
+      component: CommonLayout,
+      meta: { // 路由元信息，用于传递需要加载的组件名
+        componentName: 'Home'
+      }
     },
     {
       path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      name: 'About',
+      component: CommonLayout,
+      meta: {
+        componentName: 'About'
+      }
     },
 
     {

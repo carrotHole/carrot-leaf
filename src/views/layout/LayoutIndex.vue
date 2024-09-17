@@ -3,6 +3,24 @@
   import Aside from '@/views/layout/component/Aside.vue'
   import Main from '@/views/layout/component/Main.vue'
   import Footer from '@/views/layout/component/Footer.vue'
+  import { onMounted , ref} from 'vue'
+  import SessionStoreUtil from '@/util/SessionStoreUtil'
+  import router from '@/router'
+  import { getUserInfo } from '@/api/loginRequest'
+
+  const currentComponent = ref('')
+
+  onMounted (async ()=>{
+    // 获取token
+    const token = SessionStoreUtil.getToken()
+    if (!token) {
+      router.push("/login")
+      return
+    }
+    // 后台获取用户信息
+    const {data} = await getUserInfo()
+    console.log(data)
+  })
   </script>
 
 <template>
