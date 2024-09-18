@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElIcon } from 'element-plus'
+import router from '@/router'
 
 const isCollapse = ref(false) // 确保提供了 isCollapse 的值
 
@@ -18,7 +19,8 @@ const menuTree = ref<MenuResult[]>([
         permissionCode: '',
         menuType: 2,
         id: '11',
-        children: []
+        children: [],
+        menuUrl:"/user"
       },
       {
         menuName: '角色',
@@ -26,15 +28,17 @@ const menuTree = ref<MenuResult[]>([
         permissionCode: '',
         menuType: 2,
         id: '12',
-        children: []
+        children: [],
+        menuUrl:"/role"
       },
       {
-        menuName: '部门',
+        menuName: '菜单',
         icon: 'OfficeBuilding',
         permissionCode: '',
         menuType: 2,
         id: '13',
-        children: []
+        children: [],
+        menuUrl:"/menu"
       }
     ]
   },
@@ -56,6 +60,10 @@ const menuTree = ref<MenuResult[]>([
     ]
   }
 ])
+
+const menuClick = (item: MenuResult) => {
+  router.push(item.menuUrl)
+}
 </script>
 
 <template>
@@ -76,13 +84,16 @@ const menuTree = ref<MenuResult[]>([
             v-for="child in item.children"
             :key="child.id"
             :index="child.id"
+            @click="menuClick(child)"
           >
             <el-icon><component :is="child.icon" /></el-icon>
             <span>{{ child.menuName }}</span>
           </el-menu-item>
         </el-sub-menu>
         <el-menu-item v-else-if="item.menuType === 2"
-          >" :key="item.id" :index="item.id" :>
+                      @click="menuClick(child)"
+                      :key="item.id"
+                      :index="item.id">
           <el-icon><component :is="item.icon" /></el-icon>
           <span>{{ item.menuName }}</span>
         </el-menu-item>

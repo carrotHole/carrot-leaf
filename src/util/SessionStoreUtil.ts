@@ -39,8 +39,8 @@ export default class SessionStoreUtil {
 
     if (token == null) {
       // 跳转登录页
-      router.push('/login')
-      return
+       router.push('/login')
+       throw new Error('token为空')
     }
     return token as string
   }
