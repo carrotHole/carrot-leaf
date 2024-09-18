@@ -35,10 +35,10 @@
         </el-aside>
         <el-container>
           <el-main>
-            <Main></Main>
+            <router-view></router-view>
           </el-main>
           <el-footer>
-            <Footer/>
+            <Footer />
           </el-footer>
         </el-container>
       </el-container>
