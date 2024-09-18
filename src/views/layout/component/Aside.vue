@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElIcon } from 'element-plus'
-import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue'
 
 const isCollapse = ref(false) // 确保提供了 isCollapse 的值
 
-const menuTree = ref<Menu[]>([
+const menuTree = ref<MenuResult[]>([
   {
     menuName: '基础管理',
     icon: 'More',
