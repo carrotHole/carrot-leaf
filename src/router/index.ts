@@ -7,7 +7,6 @@ const routers = [
     path: '/',
     name: 'layout',
     component: () => import('@/views/layout/LayoutIndex.vue'),
-    children: []
   },
 
   {
@@ -80,22 +79,19 @@ router.beforeEach((to, from, next) => {
   }
 
   if (SessionStoreUtil.getToken()) {
-    alert(1)
     if (to.path === '/login') {
       return next({ path: '/' })
     } else {
-
       // todo 权限校验
       const layout = router.getRoutes().find(item => item.name === 'layout')
       if (layout && layout.children.length < 1) {
         subMenus.forEach(item => {
-          router.addRoute(
-            layout.name ? layout.name : 'layout',
-            {
-              name: item.menuName,
+          const routerRaw : RouteRecordRaw = {
+            name: item.menuName,
               path: item.menuUrl,
-              component: defineAsyncComponent(() => import(`../views/${item.componentPath}.vue`))
-            })
+            component: defineAsyncComponent(() => import(`@/views${item.componentPath}.vue`))
+          }
+          router.addRoute('layout',routerRaw)
         })
       }
       console.log(router.getRoutes())
