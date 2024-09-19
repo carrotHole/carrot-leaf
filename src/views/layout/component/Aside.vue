@@ -103,6 +103,11 @@ const menuClick = (item: MenuResult) => {
 </template>
 
 <style scoped>
+
+.layout-aside{
+  height: 100vh - var(--carrot-header-height);
+}
+
 .el-menu-item.is-active {
   background-color: var(--carrot-color-16);
 }

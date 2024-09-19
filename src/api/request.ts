@@ -3,6 +3,8 @@ import axios from 'axios'
 import SessionStoreUtil from '@/util/sessionStoreUtil'
 import MessageUtil from '@/util/MessageUtil'
 
+const whiteList = ['login/username', 'login/token']
+
 class AxiosService {
   private instance: AxiosInstance;
 
@@ -15,8 +17,14 @@ class AxiosService {
     // 请求拦截器
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        // 在发送请求之前做些什么
-        console.log(config.url)
+        for (let i = 0; i < whiteList.length; i++){
+          const whiteItem = whiteList[i]
+
+          if (config.url && config.url.includes(whiteItem)){
+            return config
+          }
+        }
+
         // 添加token到headers
         console.log(SessionStoreUtil.getToken())
         config.headers['Authorization'] = SessionStoreUtil.getToken();

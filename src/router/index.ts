@@ -7,6 +7,23 @@ const routers = [
     path: '/',
     name: 'layout',
     component: () => import('@/views/layout/LayoutIndex.vue'),
+    children: [
+      {
+        name: '用户',
+        path: '/user',
+        component: () => import('@/views/user/UserIndex.vue')
+      },
+      {
+        name: '角色',
+        path: '/role',
+        component: () => import('@/views/menu/MenuIndex.vue')
+      },
+      {
+        name: '菜单',
+        path: '/menu',
+        component: () => import('@/views//menu/MenuIndex.vue')
+      }
+    ]
   },
 
   {
@@ -37,43 +54,8 @@ const router = createRouter({
 
 const whiteList = ['login']
 
-const subMenus = [
-  {
-    menuName: '用户',
-    icon: 'UserFilled',
-    permissionCode: '',
-    menuType: 2,
-    id: '11',
-    children: [],
-    menuUrl: '/user',
-    componentPath: '/menu/MenuIndex'
-  },
-  {
-    menuName: '角色',
-    icon: 'Discount',
-    permissionCode: '',
-    menuType: 2,
-    id: '12',
-    children: [],
-    menuUrl: '/role',
-    componentPath: '/menu/MenuIndex'
-  },
-  {
-    menuName: '菜单',
-    icon: 'OfficeBuilding',
-    permissionCode: '',
-    menuType: 2,
-    id: '13',
-    children: [],
-    menuUrl: '/menu',
-    componentPath: '/menu/MenuIndex'
-  }
-]
 
 router.beforeEach((to, from, next) => {
-  console.log('------')
-  console.log(to)
-
   if (whiteList.includes(to.name?.toString() || '')){
     return next()
   }
@@ -83,18 +65,6 @@ router.beforeEach((to, from, next) => {
       return next({ path: '/' })
     } else {
       // todo 权限校验
-      const layout = router.getRoutes().find(item => item.name === 'layout')
-      if (layout && layout.children.length < 1) {
-        subMenus.forEach(item => {
-          const routerRaw : RouteRecordRaw = {
-            name: item.menuName,
-              path: item.menuUrl,
-            component: defineAsyncComponent(() => import(`@/views${item.componentPath}.vue`))
-          }
-          router.addRoute('layout',routerRaw)
-        })
-      }
-      console.log(router.getRoutes())
       return next()
     }
   } else {

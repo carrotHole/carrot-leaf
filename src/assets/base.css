@@ -4,10 +4,12 @@
   --carrot-hdeader-bg-color: #FFDBAA;
   --carrot-menu-bg-color: #FDE3C0;
 
-  --carrot-header-height: 55px;
-  --carrot-footer-height: 20px;
-  --carrot-main-height: 400px;
+  --carrot-header-height: 57px;
+  --carrot-footer-height: 30px;
+  --carrot-main-height: 200px;
+  --carrot-main-padding: 16px;
 
+  --carrot-margin: 3px;
 
   --carrot-color-1: #ffc93c;
   --carrot-color-2: #ff9a3c;
