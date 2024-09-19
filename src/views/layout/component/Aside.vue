@@ -105,7 +105,7 @@ const menuClick = (item: MenuResult) => {
 <style scoped>
 
 .layout-aside{
-  height: 100vh - var(--carrot-header-height);
+  height: calc(100vh - var(--carrot-header-height));
 }
 
 .el-menu-item.is-active {

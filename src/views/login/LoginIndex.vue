@@ -20,7 +20,7 @@ onMounted (()=>{
   // 获取token
   const token = SessionStoreUtil.getToken()
   if (token) {
-     router.push("/")
+    router.push('/')
   }
 })
 
@@ -35,7 +35,7 @@ const handleLogin = async () => {
   }
 
   if (data.users.length == 1){
-    console.log(data)
+    // console.log(data)
 
     // 用户名对应一个账号,直接获取token
     const longinResultUser = data.users[0]
@@ -47,8 +47,9 @@ const handleLogin = async () => {
   }
 
   // 缓存token
-  SessionStoreUtil.setToken(tokenValue)
+  await SessionStoreUtil.setToken(tokenValue)
   await router.push("/")
+
 }
 
 

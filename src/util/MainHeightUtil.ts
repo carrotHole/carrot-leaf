@@ -31,4 +31,4 @@ const mainDestroy = () =>{
 const mainAddResizeCallback = (callback: Function) => resizeCallbacks.push(callback)
 const mainRemoveResizeCallback = (callback: Function) => resizeCallbacks.splice(resizeCallbacks.indexOf(callback), 1)
 
-export { mainRef, mainInit, mainDestroy, mainAddResizeCallback, mainRemoveResizeCallback}
+export { height_, mainRef, mainInit, mainDestroy, mainAddResizeCallback, mainRemoveResizeCallback}

@@ -23,7 +23,8 @@ const routers = [
         path: '/menu',
         component: () => import('@/views//menu/MenuIndex.vue')
       }
-    ]
+    ],
+    redirect: '/user'
   },
 
   {
@@ -61,12 +62,8 @@ router.beforeEach((to, from, next) => {
   }
 
   if (SessionStoreUtil.getToken()) {
-    if (to.path === '/login') {
-      return next({ path: '/' })
-    } else {
-      // todo 权限校验
-      return next()
-    }
+    // todo 权限校验
+    return next()
   } else {
     return next({
       path: '/login',

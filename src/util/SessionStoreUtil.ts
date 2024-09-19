@@ -26,8 +26,8 @@ export default class SessionStoreUtil {
    * 设置token
    * @param token token
    */
-  static setToken(token: string) :void {
-    sessionStorage.setItem('token', token)
+  static async setToken(token: string) :void {
+    await sessionStorage.setItem('token', token)
   }
 
   /**
@@ -36,12 +36,6 @@ export default class SessionStoreUtil {
   static getToken() : string {
     // todo 如果token为null ，则跳转登录页面
     const token = sessionStorage.getItem('token')
-
-    if (token == null) {
-      // 跳转登录页
-       router.push('/login')
-       throw new Error('token为空')
-    }
     return token as string
   }
 
