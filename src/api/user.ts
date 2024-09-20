@@ -10,3 +10,7 @@ export const userPage = (page: Page, params: MenuQuery) => {
 export const userAdd = (params: User) => {
   return request.post<Result>(`/carrot/auUser/save`, params)
 }
+// 修改用户
+export const userUpdate = (params: User) => {
+  return request.put<Result>(`/carrot/auUser/update`, params)
+}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import { ref, shallowRef } from 'vue'
-import { userAdd, userPage } from '@/api/user'
+import { userAdd, userPage, userUpdate } from '@/api/user'
 
 
 const searchPageListRef = shallowRef<InstanceType<typeof SearchPageList>>()
@@ -23,7 +23,7 @@ const handleEdit = (user : UserInfo) => {
 }
 
 const handleEditSubmit = async (data: UserInfo) => {
-  await userAdd(data)
+  data.id ? await userUpdate(data) : await userAdd(data)
   editDialogVisible.value = false
   searchPageListRef.value?.refresh()
 }
