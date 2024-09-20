@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SearchPageList from '@/views/component/SearchPageList.vue'
+import UserEditDialog from './UserEditDialog.vue'
 import { ref, shallowRef } from 'vue'
 import { userSave, userRemove, userPage, userUpdate, userUpdateStatus } from '@/api/user'
 import MessageUtil from '@/util/MessageUtil'
@@ -20,18 +21,9 @@ const getDataList = async (page: Page, params: MenuQuery) => {
  */
 const handleEdit = (user : UserInfo) => {
   editData.value = user
-  console.log(editData.value)
   editDialogVisible.value = true
 }
-/**
- * 点击编辑保存按钮
- */
-const handleEditSubmit = async (data: UserInfo) => {
-  data.id ? await userUpdate(data) : await userSave(data)
-  editDialogVisible.value = false
-  MessageUtil.success('保存成功')
-  searchPageListRef.value?.refresh()
-}
+
 
 /**
  * 点击删除按钮
@@ -54,6 +46,10 @@ const handleUpdateStatus = async (user: UserInfo, status:number, text:string) =>
     MessageUtil.success('修改成功')
     searchPageListRef.value?.refresh()
   }
+}
+
+const handleCloseDialog = () => {
+  editDialogVisible.value = false
 }
 
 </script>
@@ -119,46 +115,8 @@ const handleUpdateStatus = async (user: UserInfo, status:number, text:string) =>
       </template>
     </SearchPageList>
 <!--  新增修改  -->
-    <el-dialog v-model="editDialogVisible" draggable title="用户编辑" width="700">
-      <el-form :data="editData" label-width="auto" style="padding: 16px">
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-form-item label="用户名">
-              <el-input v-model="editData.username" :disabled="editData.id"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="昵称">
-              <el-input v-model="editData.nickname" />
-            </el-form-item>
-          </el-col>
+      <UserEditDialog :edit-data="editData" @update:editDialogVisible="handleCloseDialog" :edit-dialog-visible="editDialogVisible" :search-page-list-ref="searchPageListRef" ></UserEditDialog>
 
-          <el-col :span="12">
-            <el-form-item label="部门">
-              <el-input v-model="editData.deptId" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="排序">
-              <el-input-number v-model="editData.sort" />
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="真实用户">
-              <el-radio-group  v-model="editData.realUser"  :disabled="editData.id">
-                <el-radio :value="0" size="large">否</el-radio>
-                <el-radio :value="1" size="large">是</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-      </el-form>
-      <template #footer>
-        <el-button icon="Close" @click="editDialogVisible=false">取消</el-button>
-        <el-button type="primary" icon="Check" @click="handleEditSubmit(editData)">保存</el-button>
-      </template>
-    </el-dialog>
 <!--  详情dialog  -->
 
   </div>
