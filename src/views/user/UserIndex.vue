@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import { ref, shallowRef } from 'vue'
-import { userAdd, userPage, userUpdate } from '@/api/user'
+import { userSave, userRemove, userPage, userUpdate, userUpdateStatus } from '@/api/user'
+import MessageUtil from '@/util/MessageUtil'
+import AdminUtil from '@/util/AdminUtil'
 
 
 const searchPageListRef = shallowRef<InstanceType<typeof SearchPageList>>()
@@ -21,11 +23,37 @@ const handleEdit = (user : UserInfo) => {
   console.log(editData.value)
   editDialogVisible.value = true
 }
-
+/**
+ * 点击编辑保存按钮
+ */
 const handleEditSubmit = async (data: UserInfo) => {
-  data.id ? await userUpdate(data) : await userAdd(data)
+  data.id ? await userUpdate(data) : await userSave(data)
   editDialogVisible.value = false
+  MessageUtil.success('保存成功')
   searchPageListRef.value?.refresh()
+}
+
+/**
+ * 点击删除按钮
+ */
+const handDelete = async (data: UserInfo) => {
+
+  if (await MessageUtil.confirm('确定删除当前用户？') ){
+    await userRemove(data.id)
+    MessageUtil.success('删除成功')
+    searchPageListRef.value?.refresh()
+  }
+}
+
+/**
+ * 修改用户状态
+ */
+const handleUpdateStatus = async (user: UserInfo, status:number, text:string) => {
+  if (await MessageUtil.confirm(`确定${text}当前用户？`)){
+    await userUpdateStatus({id:user.id, status:status})
+    MessageUtil.success('修改成功')
+    searchPageListRef.value?.refresh()
+  }
 }
 
 </script>
@@ -82,10 +110,10 @@ const handleEditSubmit = async (data: UserInfo) => {
         <el-table-column prop="createdTime" label="创建时间" />
         <el-table-column  label="操作"  fixed="right" align="center">
           <template #default="{ row }">
-            <el-button @click="handleEdit(row)" type="primary">编辑</el-button>
-            <el-button @click="handDelete(row)" type="danger">删除</el-button>
-            <el-button @click="handleDisable(row)" v-if="row.status == 1">禁用</el-button>
-            <el-button @click="handleAble(row)" v-if="row.status !== 1">解禁</el-button>
+            <el-button @click="handleEdit(row)" type="primary" v-if="!AdminUtil.isAdmin(row.username)">编辑</el-button>
+            <el-button @click="handDelete(row)" type="danger" v-if="!AdminUtil.isAdmin(row.username)">删除</el-button>
+            <el-button @click="handleUpdateStatus(row,0,'禁用')" v-if="row.status == 1 && !AdminUtil.isAdmin(row.username)">禁用</el-button>
+            <el-button @click="handleUpdateStatus(row, 1, '解禁')" v-if="row.status !== 1 && !AdminUtil.isAdmin(row.username)">解禁</el-button>
           </template>
         </el-table-column>
       </template>
@@ -96,7 +124,7 @@ const handleEditSubmit = async (data: UserInfo) => {
         <el-row :gutter="16">
           <el-col :span="12">
             <el-form-item label="用户名">
-              <el-input v-model="editData.username" />
+              <el-input v-model="editData.username" :disabled="editData.id"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -117,7 +145,7 @@ const handleEditSubmit = async (data: UserInfo) => {
           </el-col>
           <el-col>
             <el-form-item label="真实用户">
-              <el-radio-group  v-model="editData.realUser">
+              <el-radio-group  v-model="editData.realUser"  :disabled="editData.id">
                 <el-radio :value="0" size="large">否</el-radio>
                 <el-radio :value="1" size="large">是</el-radio>
               </el-radio-group>
@@ -127,7 +155,7 @@ const handleEditSubmit = async (data: UserInfo) => {
 
       </el-form>
       <template #footer>
-        <el-button icon="Close">取消</el-button>
+        <el-button icon="Close" @click="editDialogVisible=false">取消</el-button>
         <el-button type="primary" icon="Check" @click="handleEditSubmit(editData)">保存</el-button>
       </template>
     </el-dialog>

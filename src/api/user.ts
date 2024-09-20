@@ -7,10 +7,18 @@ export const userPage = (page: Page, params: MenuQuery) => {
 }
 
 // 新增用户
-export const userAdd = (params: User) => {
-  return request.post<Result>(`/carrot/auUser/save`, params)
+export const userSave = (params: User) => {
+  return request.post<boolean>(`/carrot/auUser/save`, params)
 }
 // 修改用户
 export const userUpdate = (params: User) => {
-  return request.put<Result>(`/carrot/auUser/update`, params)
+  return request.put<boolean>(`/carrot/auUser/update`, params)
+}
+// 删除用户
+export const userRemove = (id: number) => {
+  return request.delete<Result>(`/carrot/auUser/remove/${id}`)
+}
+// 删除用户
+export const userUpdateStatus = (data:{id:string, status:number}) => {
+  return request.put<boolean>(`/carrot/auUser/updateStatus`,data)
 }
