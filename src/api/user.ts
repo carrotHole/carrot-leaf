@@ -5,3 +5,8 @@ import request from "@/api/request";
 export const userPage = (page: Page, params: MenuQuery) => {
   return request.get<Result>(`/carrot/auUser/page`, {"params":{...page, ... params}})
 }
+
+// 新增用户
+export const userAdd = (params: User) => {
+  return request.post<Result>(`/carrot/auUser/save`, params)
+}

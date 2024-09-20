@@ -37,6 +37,21 @@ interface User {
    nickname: string | undefined
 }
 
+
+
+interface UserInfo extends User{
+  /**
+   * 主键
+   */
+  id: string | undefined
+
+  /**
+   * 排序
+   */
+  sort: number | undefined
+
+}
+
 interface UserQuery extends User {
   /**
    * 创建时间

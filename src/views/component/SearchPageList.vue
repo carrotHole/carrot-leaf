@@ -106,7 +106,7 @@ onUnmounted(() => {
 })
 
 defineExpose({
-  refresh: getDataList_(),
+  refresh: () => getDataList_(),
   getList: () => dataList_.value,
 })
 
@@ -145,10 +145,7 @@ defineExpose({
       <div class="page-list-title">
         <span class="page-list-title-left"> {{props.title}} </span>
         <span class="page-list-title-right">
-          <el-button size="default" icon="Plus" type="primary"> 新增 </el-button>
-          <el-button size="default" icon="Download"> 导出 </el-button>
-          <el-button size="default" icon="Refresh" @click="getDataList_"> 刷新 </el-button>
-          <el-button size="default" icon="Delete" type="danger"> 批量删除 </el-button>
+          <slot name="button"></slot>
         </span>
       </div>
       <div class="page-list-content" >
