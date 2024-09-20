@@ -113,6 +113,7 @@ const menuClick = (item: MenuResult) => {
 }
 .el-menu {
   background: var(--carrot-color-19);
+  border-right: 0;
 }
 .el-menu-item {
   background-color: var(--carrot-color-18);
