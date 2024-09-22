@@ -50,12 +50,12 @@ const menuTree = ref<MenuResult[]>([
     id: '2',
     children: [
       {
-        menuName: '测试',
-        icon: 'UserFilled',
+        menuName: '字典',
+        icon: 'Setting',
         permissionCode: '',
         menuType: 2,
         id: '21',
-        children: []
+        menuUrl: "/dict"
       }
     ]
   }

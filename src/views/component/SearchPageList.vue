@@ -113,7 +113,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="carrot-main-container">
     <div class="search-card" ref="searchRef">
       <div @click="showSearch_ = !showSearch_">
         <el-button link>

@@ -73,83 +73,66 @@ onUnmounted(() => {
 <template>
   <div class="main-container">
     <div class="search-card" ref="searchRef">
-      <div @click="showSearch = !showSearch">
-        <el-button link>
-          <el-icon>
-            <ArrowRightBold v-if="!showSearch" />
-            <ArrowDownBold v-if="showSearch" />
-          </el-icon>
-          &nbsp;搜索
-        </el-button>
-      </div>
-      <el-collapse-transition>
-        <div v-show="showSearch">
-          <!--    起padding-top作用,防止展开动画卡顿    -->
-          <div style="height: 16px"></div>
-          <el-form :model="queryParams" label-width="20%" size="default">
-            <el-row :gutter="16">
-              <el-col :span="6">
-                <el-form-item label="菜单名称">
-                  <el-input v-model="queryParams.menuName" />
-                </el-form-item>
-              </el-col>
+<!--      <div @click="showSearch = !showSearch">-->
+<!--        <el-button link>-->
+<!--          <el-icon>-->
+<!--            <ArrowRightBold v-if="!showSearch" />-->
+<!--            <ArrowDownBold v-if="showSearch" />-->
+<!--          </el-icon>-->
+<!--          &nbsp;搜索-->
+<!--        </el-button>-->
+<!--      </div>-->
+<!--      <el-collapse-transition>-->
+<!--        <div v-show="showSearch">-->
+<!--          &lt;!&ndash;    起padding-top作用,防止展开动画卡顿    &ndash;&gt;-->
+<!--          <div style="height: 16px"></div>-->
+<!--          <el-form :model="queryParams" label-width="20%" size="default">-->
+<!--            <el-row :gutter="16">-->
+<!--              <el-col :span="6">-->
+<!--                <el-form-item label="菜单名称">-->
+<!--                  <el-input v-model="queryParams.menuName" />-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
 
-              <el-col :span="6">
-                <el-form-item label="路由地址">
-                  <el-input v-model="queryParams.menuName" />
-                </el-form-item>
-              </el-col>
+<!--              <el-col :span="6">-->
+<!--                <el-form-item label="路由地址">-->
+<!--                  <el-input v-model="queryParams.menuName" />-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
 
-              <el-col :span="6">
-                <el-form-item label="路径">
-                  <el-input v-model="queryParams.menuName" />
-                </el-form-item>
-              </el-col>
+<!--              <el-col :span="6">-->
+<!--                <el-form-item label="路径">-->
+<!--                  <el-input v-model="queryParams.menuName" />-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
 
-              <el-col :span="6">
-                <el-form-item label="父主键">
-                  <el-input v-model="queryParams.menuName" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="父主键">
-                  <el-input v-model="queryParams.menuName" />
-                </el-form-item>
-              </el-col>
+<!--              <el-col :span="6">-->
+<!--                <el-form-item label="父主键">-->
+<!--                  <el-input v-model="queryParams.menuName" />-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
+<!--              <el-col :span="6">-->
+<!--                <el-form-item label="父主键">-->
+<!--                  <el-input v-model="queryParams.menuName" />-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
 
-              <el-col :span="6" class="search-button">
-                <el-button plain icon="Refresh">重置</el-button>
-                <el-button type="primary" plain icon="Search">查询</el-button>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-      </el-collapse-transition>
+<!--              <el-col :span="6" class="search-button">-->
+<!--                <el-button plain icon="Refresh">重置</el-button>-->
+<!--                <el-button type="primary" plain icon="Search">查询</el-button>-->
+<!--              </el-col>-->
+<!--            </el-row>-->
+<!--          </el-form>-->
+<!--        </div>-->
+<!--      </el-collapse-transition>-->
     </div>
-    <div class="page-list" :style="{ height: pageListHeight + 'px' }">
-      <div class="page-list-title">
-        <span class="page-list-title-left"> 菜单分页列表 </span>
-        <span class="page-list-title-right">
-          <el-button size="default" icon="Plus" type="primary"> 新增 </el-button>
-          <el-button  size="default" icon="Download"> 导出 </el-button>
-          <el-button  size="default" icon="Delete" type="danger"> 批量删除 </el-button>
-        </span>
 
-      </div>
-      <div class="page-list-content">
-        <el-table :data="dataList">
-          <el-table-column prop="menuName" label="Date" width="180" />
-          <el-table-column prop="name" label="Name" width="180" />
-          <el-table-column prop="address" label="Address" />
-        </el-table>
-      </div>
-      <div class="page-list-foot"></div>
-    </div>
   </div>
 </template>
 
 <style scoped>
 .search-card {
+  width: 50%;
   background-color: #ffffff;
   border-radius: 5px;
   padding: 12px 16px;

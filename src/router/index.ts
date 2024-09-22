@@ -21,7 +21,12 @@ const routers = [
       {
         name: '菜单',
         path: '/menu',
-        component: () => import('@/views//menu/MenuIndex.vue')
+        component: () => import('@/views/menu/MenuIndex.vue')
+      },
+      {
+        name: '字典',
+        path: '/dict',
+        component: () => import('@/views/dict/DictIndex.vue')
       }
     ],
     redirect: '/user'
