@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { ref, computed } from 'vue'
-import { addDict, updateDict } from '@/api/dict'
+import { addDictContent, updateDictContent } from '@/api/dict'
 import MessageUtil from '@/util/MessageUtil'
 
 const emit = defineEmits(['update:editDialogVisible', 'refresh'])
@@ -21,8 +21,8 @@ const editDialogVisible_ = ref(computed({
 /**
  * 点击编辑保存按钮
  */
-const handleEditSubmit = async (data: Dict) => {
-  data.id ? await updateDict(data) : await addDict(data)
+const handleEditSubmit = async (data: DictContent) => {
+  data.id ? await updateDictContent(data) : await addDictContent(data)
   editDialogVisible_.value = false
   MessageUtil.success('保存成功')
   // 刷新列表
@@ -37,7 +37,7 @@ const handleEditSubmit = async (data: Dict) => {
       <el-row :gutter="16">
         <el-col :span="24">
           <el-form-item label="标志">
-            <el-input v-model="editData.type" :disabled="editData.id!==undefined"/>
+            <el-input v-model="editData.mark" :disabled="editData.id!==undefined"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -49,6 +49,11 @@ const handleEditSubmit = async (data: Dict) => {
         <el-col :span="24">
           <el-form-item label="备注">
             <el-input type="textarea" v-model="editData.remark" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="排序">
+            <el-input type="number" v-model="editData.sort" />
           </el-form-item>
         </el-col>
       </el-row>

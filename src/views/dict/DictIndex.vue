@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Search, Plus, Delete } from '@element-plus/icons-vue'
-import { deleteDict, getDictContentList, getDictList } from '@/api/dict'
+import { deleteDict, deleteDictContent, getDictContentList, getDictList } from '@/api/dict'
 import DictEditDialog from './DictEditDialog.vue'
+import DictContentEditDialog from './DictContentEditDialog.vue'
 import MessageUtil from '@/util/MessageUtil'
 
 const dictQueryParam = ref<string|undefined>(undefined)
@@ -13,7 +14,9 @@ const dictContentList = ref<DictContent[]>([])
 const dictLoading = ref(false)
 const dictContentLoading = ref(false)
 const editDict = ref<Dict|{}>()
+const editDictContent = ref<DictContent|{}>()
 const editDictDialogVisible = ref(false)
+const editDictContentDialogVisible = ref(false)
 
 /**
  * 获取字典类型列表
@@ -64,17 +67,37 @@ const handleChangeDictClass = async () =>{
  * 点击新增/编辑字典按钮
  */
 const handleEditDict = (dict:Dict|{})=>{
-  console.log(dict)
   editDict.value = dict
-  console.log(editDict.value)
   editDictDialogVisible.value = true
 }
+/**
+ * 点击新增/编辑字典内容按钮
+ */
+const handleEditDictContent = (dict:DictContent|{})=>{
+  editDictContent.value = dict
+  editDictContentDialogVisible.value = true
+}
 
+/**
+ * 点击删除字典类型按钮
+ * @param dict
+ */
 const handleDeleteDict = async (dict:Dict)=>{
   if (await MessageUtil.confirm("确定删除当前字典？", '提示')){
     const {data} = await deleteDict(dict.id)
     MessageUtil.success("删除成功")
     await getDictDataList()
+  }
+}
+
+/**
+ * 点击删除字典内容按钮
+ */
+const handleDeleteDictContent = async (dictContent:DictContent)=>{
+  if (await MessageUtil.confirm("确定删除当前字典内容？", '提示')){
+    const {data} = await deleteDictContent(dictContent.id)
+    MessageUtil.success("删除成功")
+    await getDictContentDataList()
   }
 }
 
@@ -127,7 +150,7 @@ onMounted(()=>{
           <span  v-if="currentType != undefined && currentType.remark !=undefined && currentType.remark != ''">  {{currentType.remark}}</span>
         </div>
         <div class="dict-right-title-right">
-          <el-button icon="Plus" type="primary">新增字典内容</el-button>
+          <el-button icon="Plus"  v-if="currentType != undefined" type="primary" @click="handleEditDictContent({type:currentType.type})">新增字典内容</el-button>
         </div>
       </div>
 
@@ -146,7 +169,8 @@ onMounted(()=>{
 
     </div>
 
-    <DictEditDialog :edit-dialog-visible="editDictDialogVisible" :refresh="getDictContentDataList" :edit-data="editDict" @update:editDialogVisible="editDictDialogVisible=false"></DictEditDialog>
+    <DictEditDialog :edit-dialog-visible="editDictDialogVisible" :edit-data="editDict" @update:editDialogVisible="editDictDialogVisible=false" @refresh="getDictDataList" ></DictEditDialog>
+    <DictContentEditDialog :edit-dialog-visible="editDictContentDialogVisible" :edit-data="editDictContent" @update:editDialogVisible="editDictContentDialogVisible=false" @refresh="getDictContentDataList" ></DictContentEditDialog>
 
   </div>
 </template>

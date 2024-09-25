@@ -78,7 +78,17 @@ const handleCloseDialog = () => {
 
         <el-col :span="6">
           <el-form-item label="状态">
-            <el-input v-model="queryParams.status" />
+            <el-select
+              v-model="queryParams.status"
+              placeholder="状态"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">

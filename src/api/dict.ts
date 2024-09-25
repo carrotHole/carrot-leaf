@@ -34,8 +34,39 @@ export const updateDict = (dict : Dict) => {
 
 /**
  * 删除字典
- * @param dict
+ * @param id
  */
 export const deleteDict = (id : string) => {
   return request.delete<Result>(`/carrot/dictSys/remove/${id}`,)
 }
+
+/**
+ * 新增字典内容
+ * @param dictContent
+ */
+export const addDictContent = (dictContent : DictContent) => {
+  return request.post<Result>(`/carrot/dictSys/saveContent`,dictContent)
+}
+/**
+ * 更新字典内容
+ * @param dictContent
+ */
+export const updateDictContent = (dictContent : DictContent) => {
+  return request.put<Result>(`/carrot/dictSys/updateContent`,dictContent)
+}
+
+/**
+ * 删除字典内容
+ * @param id
+ */
+export const deleteDictContent = (id : string) => {
+  return request.delete<Result>(`/carrot/dictSys/removeContent/${id}`,)
+}
+/**
+ * 获取字典内容
+ * @param type
+ */
+export const listContentByType = (type : string) => {
+  return request.get<Result>(`/carrot/listContentByType/${type}`,)
+}
+

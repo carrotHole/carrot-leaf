@@ -26,7 +26,6 @@ class AxiosService {
         }
 
         // 添加token到headers
-        console.log(SessionStoreUtil.getToken())
         config.headers['Authorization'] = SessionStoreUtil.getToken();
         return config;
       },

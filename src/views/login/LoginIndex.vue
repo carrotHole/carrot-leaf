@@ -35,8 +35,6 @@ const handleLogin = async () => {
   }
 
   if (data.users.length == 1){
-    // console.log(data)
-
     // 用户名对应一个账号,直接获取token
     const longinResultUser = data.users[0]
     const tokenRes = await getToken(data.identifyKey, longinResultUser.deptId)
