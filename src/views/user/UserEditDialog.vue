@@ -15,7 +15,7 @@ const editData = ref(computed({
 }))
 const editDialogVisible_ = ref(computed({
   get: () => props.editDialogVisible,
-  set: (value) => {editData.value = {};emit('update:editDialogVisible', value)}
+  set: (value) => {emit('update:editDialogVisible', value)}
 }))
 /**
  * 点击编辑保存按钮

@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Search, Plus, Delete } from '@element-plus/icons-vue'
-import { getDictContentList, getDictList } from '@/api/dict'
+import { deleteDict, getDictContentList, getDictList } from '@/api/dict'
+import DictEditDialog from './DictEditDialog.vue'
+import MessageUtil from '@/util/MessageUtil'
 
-
-const dictQueryParam = ref<string>(undefined)
-const currentType = ref<Dict>(undefined)
+const dictQueryParam = ref<string|undefined>(undefined)
+const currentType = ref<Dict>()
 const currentDictClass = ref('proj')
 const dictList = ref<Dict[]>([])
-const dictContentList = ref<DictContent>([])
+const dictContentList = ref<DictContent[]>([])
 const dictLoading = ref(false)
 const dictContentLoading = ref(false)
+const editDict = ref<Dict|{}>()
+const editDictDialogVisible = ref(false)
 
 /**
  * 获取字典类型列表
@@ -24,6 +27,8 @@ const getDictDataList = async () => {
   dictLoading.value = true
   const { data } = await getDictList(dictQueryParam.value)
   dictList.value = data
+  dictContentList.value = []
+  currentType.value = undefined
   dictLoading.value = false
 }
 /**
@@ -31,7 +36,10 @@ const getDictDataList = async () => {
  */
 const getDictContentDataList = async () => {
   dictContentLoading.value= true
-  const {data} = await getDictContentList(currentType.value?.type)
+  if (currentType.value == undefined){
+    return
+  }
+  const {data} = await getDictContentList(currentType.value.type)
   dictContentList.value = data
   dictContentLoading.value= false
 }
@@ -50,6 +58,24 @@ const handleClickType = async (item: Dict) =>{
 
 const handleChangeDictClass = async () =>{
 
+}
+
+/**
+ * 点击新增/编辑字典按钮
+ */
+const handleEditDict = (dict:Dict|{})=>{
+  console.log(dict)
+  editDict.value = dict
+  console.log(editDict.value)
+  editDictDialogVisible.value = true
+}
+
+const handleDeleteDict = async (dict:Dict)=>{
+  if (await MessageUtil.confirm("确定删除当前字典？", '提示')){
+    const {data} = await deleteDict(dict.id)
+    MessageUtil.success("删除成功")
+    await getDictDataList()
+  }
 }
 
 onMounted(()=>{
@@ -76,7 +102,7 @@ onMounted(()=>{
       </el-tabs>
 
       <div class="dict-left-button">
-        <el-button icon="Plus" type="primary" size="small">新增字典</el-button>
+        <el-button icon="Plus" type="primary" size="small" @click="handleEditDict({})">新增字典</el-button>
       </div>
       <div class="dict-left-scrollbar">
         <el-scrollbar height="100%" class="dict-left-scrollbar border-radius-6">
@@ -84,8 +110,8 @@ onMounted(()=>{
             <li v-for="item in dictList" :key="item.id" class="dict-li" @click="handleClickType(item)">
               <div class="li-title">{{item.type}}（{{item.name}}）</div>
               <div class="li-button">
-                  <el-button text type="danger" icon="Edit"></el-button>
-                  <el-button text type="primary" icon="Delete"></el-button>
+                  <el-button text type="danger" icon="Edit" @click="handleEditDict(item)"></el-button>
+                  <el-button text type="primary" icon="Delete" @click="handleDeleteDict(item)"></el-button>
               </div>
             </li>
           </ul>
@@ -112,13 +138,16 @@ onMounted(()=>{
           <el-table-column prop="remark" label="备注" />
           <el-table-column  label="操作" right width="180" >
             <template #default="{row}">
-              <el-button type="danger" size="small" icon="Delete" @click="handleDelete(row)">删除</el-button>
+              <el-button type="danger" size="small" icon="Delete" @click="handleDeleteDictContent(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
 
     </div>
+
+    <DictEditDialog :edit-dialog-visible="editDictDialogVisible" :refresh="getDictContentDataList" :edit-data="editDict" @update:editDialogVisible="editDictDialogVisible=false"></DictEditDialog>
+
   </div>
 </template>
 

@@ -1,5 +1,5 @@
-interface Dict{
-  id: number;
+interface Dict {
+  id: string;
   name: string;
   type: string;
   remark: string;
