@@ -4,19 +4,11 @@ import { ref, computed } from 'vue'
 import { addDict, updateDict } from '@/api/dict'
 import MessageUtil from '@/util/MessageUtil'
 
-const emit = defineEmits(['update:editDialogVisible', 'refresh'])
-const props = defineProps({
-  editData: {type: Object, required: true},
-  editDialogVisible: {type: Boolean, required: true},
-})
+const emit = defineEmits(['refresh'])
 
-const editData = ref(computed({
-  get: () => props.editData,
-}))
-const editDialogVisible_ = ref(computed({
-  get: () => props.editDialogVisible,
-  set: (value) => {emit('update:editDialogVisible', value)}
-}))
+
+const editData = defineModel('editData');
+const editDialogVisible_ = defineModel()
 
 /**
  * 点击编辑保存按钮

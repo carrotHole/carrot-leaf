@@ -1,22 +1,13 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
 import { userSave, userUpdate } from '@/api/user'
 import MessageUtil from '@/util/MessageUtil'
 
-const emit = defineEmits(['update:editDialogVisible'])
 const props = defineProps({
-  editData: {type: Object, required: true},
   searchPageListRef: {type: Object, required: true},
-  editDialogVisible: {type: Boolean, required: true},
 })
 
-const editData = ref(computed({
-  get: () => props.editData
-}))
-const editDialogVisible_ = ref(computed({
-  get: () => props.editDialogVisible,
-  set: (value) => {emit('update:editDialogVisible', value)}
-}))
+const editData = defineModel('editData');
+const editDialogVisible_ = defineModel()
 /**
  * 点击编辑保存按钮
  */

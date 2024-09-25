@@ -5,6 +5,7 @@ import { deleteDict, deleteDictContent, getDictContentList, getDictList } from '
 import DictEditDialog from './DictEditDialog.vue'
 import DictContentEditDialog from './DictContentEditDialog.vue'
 import MessageUtil from '@/util/MessageUtil'
+import BeanUtil from '@/util/BeanUtil'
 
 const dictQueryParam = ref<string|undefined>(undefined)
 const currentType = ref<Dict>()
@@ -67,14 +68,14 @@ const handleChangeDictClass = async () =>{
  * 点击新增/编辑字典按钮
  */
 const handleEditDict = (dict:Dict|{})=>{
-  editDict.value = dict
+  editDict.value = BeanUtil.deepCopy(dict)
   editDictDialogVisible.value = true
 }
 /**
  * 点击新增/编辑字典内容按钮
  */
 const handleEditDictContent = (dict:DictContent|{})=>{
-  editDictContent.value = dict
+  editDictContent.value = BeanUtil.deepCopy(dict)
   editDictContentDialogVisible.value = true
 }
 
@@ -159,9 +160,10 @@ onMounted(()=>{
           <el-table-column prop="mark" label="标志" width="180" />
           <el-table-column prop="name" label="名称" width="180" />
           <el-table-column prop="remark" label="备注" />
-          <el-table-column  label="操作" right width="180" >
+          <el-table-column  label="操作" right  >
             <template #default="{row}">
-              <el-button type="danger" size="small" icon="Delete" @click="handleDeleteDictContent(row)">删除</el-button>
+              <el-button type="primary" text @click="handleEditDictContent(row)">编辑</el-button>
+              <el-button type="danger" text  @click="handleDeleteDictContent(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -169,8 +171,8 @@ onMounted(()=>{
 
     </div>
 
-    <DictEditDialog :edit-dialog-visible="editDictDialogVisible" :edit-data="editDict" @update:editDialogVisible="editDictDialogVisible=false" @refresh="getDictDataList" ></DictEditDialog>
-    <DictContentEditDialog :edit-dialog-visible="editDictContentDialogVisible" :edit-data="editDictContent" @update:editDialogVisible="editDictContentDialogVisible=false" @refresh="getDictContentDataList" ></DictContentEditDialog>
+    <DictEditDialog v-model="editDictDialogVisible" :edit-data="editDict" @refresh="getDictDataList" ></DictEditDialog>
+    <DictContentEditDialog v-model="editDictContentDialogVisible" :edit-data="editDictContent"  @refresh="getDictContentDataList" ></DictContentEditDialog>
 
   </div>
 </template>

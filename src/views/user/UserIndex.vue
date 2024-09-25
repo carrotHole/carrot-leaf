@@ -5,6 +5,7 @@ import { ref, shallowRef } from 'vue'
 import { userSave, userRemove, userPage, userUpdate, userUpdateStatus } from '@/api/user'
 import MessageUtil from '@/util/MessageUtil'
 import AdminUtil from '@/util/AdminUtil'
+import BeanUtil from '@/util/BeanUtil'
 
 
 const searchPageListRef = shallowRef<InstanceType<typeof SearchPageList>>()
@@ -20,7 +21,7 @@ const getDataList = async (page: Page, params: MenuQuery) => {
  * 点击详情按钮
  */
 const handleEdit = (user : UserInfo) => {
-  editData.value = user
+  editData.value = BeanUtil.deepCopy(user)
   editDialogVisible.value = true
 }
 
@@ -125,7 +126,7 @@ const handleCloseDialog = () => {
       </template>
     </SearchPageList>
 <!--  新增修改  -->
-      <UserEditDialog :edit-data="editData" @update:editDialogVisible="handleCloseDialog" :edit-dialog-visible="editDialogVisible" :search-page-list-ref="searchPageListRef" ></UserEditDialog>
+      <UserEditDialog :edit-data="editData"  v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" ></UserEditDialog>
 
 <!--  详情dialog  -->
 
