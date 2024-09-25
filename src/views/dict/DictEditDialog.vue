@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
-import { ref, computed } from 'vue'
 import { addDict, updateDict } from '@/api/dict'
 import MessageUtil from '@/util/MessageUtil'
+const props = defineProps<{
+  currentClass: string
+}>()
 
 const emit = defineEmits(['refresh'])
-
-
 const editData = defineModel('editData');
 const editDialogVisible_ = defineModel()
 
@@ -14,7 +14,8 @@ const editDialogVisible_ = defineModel()
  * 点击编辑保存按钮
  */
 const handleEditSubmit = async (data: Dict) => {
-  data.id ? await updateDict(data) : await addDict(data)
+  console.log(props.currentClass)
+  data.id ? await updateDict(data, props.currentClass) : await addDict(data, props.currentClass)
   editDialogVisible_.value = false
   MessageUtil.success('保存成功')
   // 刷新列表

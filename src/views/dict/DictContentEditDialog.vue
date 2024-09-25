@@ -3,8 +3,11 @@
 import { addDictContent, updateDictContent } from '@/api/dict'
 import MessageUtil from '@/util/MessageUtil'
 
-const emit = defineEmits(['refresh'])
+const props = defineProps<{
+  currentClass: String
+}>()
 
+const emit = defineEmits(['refresh'])
 const editData = defineModel('editData');
 const editDialogVisible_ = defineModel()
 
@@ -12,7 +15,7 @@ const editDialogVisible_ = defineModel()
  * 点击编辑保存按钮
  */
 const handleEditSubmit = async (data: DictContent) => {
-  data.id ? await updateDictContent(data) : await addDictContent(data)
+  data.id ? await updateDictContent(data, props.currentClass) : await addDictContent(data, props.currentClass)
   editDialogVisible_.value = false
   MessageUtil.success('保存成功')
   // 刷新列表

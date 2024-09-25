@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { Search, Plus, Delete } from '@element-plus/icons-vue'
+import {  onMounted,  ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
 import { deleteDict, deleteDictContent, getDictContentList, getDictList } from '@/api/dict'
 import DictEditDialog from './DictEditDialog.vue'
 import DictContentEditDialog from './DictContentEditDialog.vue'
 import MessageUtil from '@/util/MessageUtil'
 import BeanUtil from '@/util/BeanUtil'
+import DictClassConstant from '@/constant/DictClassConstant'
 
 const dictQueryParam = ref<string|undefined>(undefined)
 const currentType = ref<Dict>()
-const currentDictClass = ref('proj')
+const currentDictClass = ref(DictClassConstant.PROJECT)
 const dictList = ref<Dict[]>([])
 const dictContentList = ref<DictContent[]>([])
 const dictLoading = ref(false)
@@ -29,7 +30,7 @@ const getDictDataList = async () => {
   }
 
   dictLoading.value = true
-  const { data } = await getDictList(dictQueryParam.value)
+  const { data } = await getDictList(dictQueryParam.value, currentDictClass.value)
   dictList.value = data
   dictContentList.value = []
   currentType.value = undefined
@@ -43,7 +44,7 @@ const getDictContentDataList = async () => {
   if (currentType.value == undefined){
     return
   }
-  const {data} = await getDictContentList(currentType.value.type)
+  const {data} = await getDictContentList(currentType.value.type, currentDictClass.value)
   dictContentList.value = data
   dictContentLoading.value= false
 }
@@ -60,8 +61,10 @@ const handleClickType = async (item: Dict) =>{
   await getDictContentDataList()
 }
 
-const handleChangeDictClass = async () =>{
-
+const handleChangeDictClass = async (tab: TabsPaneContext, event: Event) =>{
+  currentDictClass.value = tab.paneName
+  console.log(currentDictClass.value)
+  await getDictDataList()
 }
 
 /**
@@ -85,7 +88,7 @@ const handleEditDictContent = (dict:DictContent|{})=>{
  */
 const handleDeleteDict = async (dict:Dict)=>{
   if (await MessageUtil.confirm("确定删除当前字典？", '提示')){
-    const {data} = await deleteDict(dict.id)
+    const {data} = await deleteDict(dict.id, currentDictClass.value)
     MessageUtil.success("删除成功")
     await getDictDataList()
   }
@@ -96,7 +99,7 @@ const handleDeleteDict = async (dict:Dict)=>{
  */
 const handleDeleteDictContent = async (dictContent:DictContent)=>{
   if (await MessageUtil.confirm("确定删除当前字典内容？", '提示')){
-    const {data} = await deleteDictContent(dictContent.id)
+    const {data} = await deleteDictContent(dictContent.id, currentDictClass.value)
     MessageUtil.success("删除成功")
     await getDictContentDataList()
   }
@@ -121,8 +124,8 @@ onMounted(()=>{
 
 
       <el-tabs v-model="currentDictClass" class="dict-left-tables" @tab-click="handleChangeDictClass">
-        <el-tab-pane label="应用" name="proj"></el-tab-pane>
-        <el-tab-pane label="系统" name="sys"></el-tab-pane>
+        <el-tab-pane label="应用" :name="DictClassConstant.PROJECT"></el-tab-pane>
+        <el-tab-pane label="系统" :name="DictClassConstant.SYS"></el-tab-pane>
       </el-tabs>
 
       <div class="dict-left-button">
@@ -171,8 +174,8 @@ onMounted(()=>{
 
     </div>
 
-    <DictEditDialog v-model="editDictDialogVisible" :edit-data="editDict" @refresh="getDictDataList" ></DictEditDialog>
-    <DictContentEditDialog v-model="editDictContentDialogVisible" :edit-data="editDictContent"  @refresh="getDictContentDataList" ></DictContentEditDialog>
+    <DictEditDialog v-model="editDictDialogVisible" :edit-data="editDict" @refresh="getDictDataList" :currentClass="currentDictClass"></DictEditDialog>
+    <DictContentEditDialog v-model="editDictContentDialogVisible" :edit-data="editDictContent"  @refresh="getDictContentDataList" :currentClass="currentDictClass"></DictContentEditDialog>
 
   </div>
 </template>
