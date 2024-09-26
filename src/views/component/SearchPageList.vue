@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<{
   title: string
   showSearch:boolean
   pageSize: number
-  getDataList:(page: Page, params: any)=>PageData
+  getDataList:(page: Page)=>PageData
 }>(), {
   title: '',
   showSearch:true,
@@ -33,9 +33,7 @@ const mainHeight = ref<number>(height_)
 const searchHeight = ref<number>(50)
 const pageListHeight = ref<number>(200)
 
-const queryParams = ref<any>({})
-
-const emit = defineEmits(['getList'])
+const emit = defineEmits(['getList','reset'])
 
 
 const getDataList_ = async () => {
@@ -47,8 +45,7 @@ const getDataList_ = async () => {
     {
       pageNumber: pageNumber_.value,
       pageSize: pageSize_.value
-    },
-    queryParams.value
+    }
   )
 
   dataList_.value = data.records
@@ -128,12 +125,12 @@ defineExpose({
         <div v-show="showSearch_">
           <!--    起padding-top作用,防止展开动画卡顿    -->
           <div style="height: 16px"></div>
-          <el-form :model="queryParams" label-width="20%" size="default">
+          <el-form label-width="20%" size="default">
             <el-row :gutter="16">
               <slot name="search"></slot>
 
               <el-col :span="6" class="search-button">
-                <el-button plain icon="Refresh" @click="queryParams = {}">重置</el-button>
+                <el-button plain icon="Refresh" @click="emit('reset')">重置</el-button>
                 <el-button type="primary" plain icon="Search" @click="getDataList_">查询</el-button>
               </el-col>
             </el-row>

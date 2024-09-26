@@ -2,19 +2,30 @@
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import UserEditDialog from './UserEditDialog.vue'
 import { ref, shallowRef } from 'vue'
-import { userSave, userRemove, userPage, userUpdate, userUpdateStatus } from '@/api/user'
+import { userRemove, userPage, userUpdateStatus } from '@/api/user'
 import MessageUtil from '@/util/MessageUtil'
 import AdminUtil from '@/util/AdminUtil'
 import BeanUtil from '@/util/BeanUtil'
-
+import { listContentByType } from '@/api/dict'
+import DictClassConstant from '@/constant/DictClassConstant'
+import DictSelect from '@/views/component/DictSelect.vue'
 
 const searchPageListRef = shallowRef<InstanceType<typeof SearchPageList>>()
-const queryParams = ref<UserQuery>({})
+const queryParams = ref<UserQuery>({
+  createdType: undefined,
+  deptId: undefined,
+  nickname: undefined,
+  realUser: undefined,
+  status: undefined,
+  tenantId: undefined,
+  username: undefined
+})
 const editDialogVisible = ref(false)
-const editData = ref<UserInfo>({})
+const editData = ref<UserInfo>()
+const dictContentList = ref<DictContent[]>()
 
-const getDataList = async (page: Page, params: MenuQuery) => {
-  const { data } = await userPage(page,params)
+const getDataList = async (page: Page) => {
+  const { data } = await userPage(page,queryParams.value)
   return data
 }
 /**
@@ -32,6 +43,9 @@ const handleEdit = (user : UserInfo) => {
 const handDelete = async (data: UserInfo) => {
 
   if (await MessageUtil.confirm('确定删除当前用户？') ){
+    if (!data.id){
+      return
+    }
     await userRemove(data.id)
     MessageUtil.success('删除成功')
     searchPageListRef.value?.refresh()
@@ -43,21 +57,45 @@ const handDelete = async (data: UserInfo) => {
  */
 const handleUpdateStatus = async (user: UserInfo, status:number, text:string) => {
   if (await MessageUtil.confirm(`确定${text}当前用户？`)){
+    if (!user.id){
+      return
+    }
     await userUpdateStatus({id:user.id, status:status})
     MessageUtil.success('修改成功')
     searchPageListRef.value?.refresh()
   }
 }
 
-const handleCloseDialog = () => {
-  editDialogVisible.value = false
+/**
+ * 点击查询重置按钮
+ */
+const queryParamsReset = async () => {
+  queryParams.value = {
+    createdType: undefined,
+    deptId: undefined,
+    nickname: undefined,
+    realUser: undefined,
+    status: undefined,
+    tenantId: undefined,
+    username: undefined
+  }
+  searchPageListRef.value?.refresh()
 }
+
+
+const getDictContentList= async ()=>{
+  const {data} = await listContentByType('STATUS', DictClassConstant.SYS)
+  dictContentList.value = data
+}
+
+
+getDictContentList()
 
 </script>
 
 <template>
   <div>
-    <SearchPageList :get-data-list="getDataList" title="用户列表" ref="searchPageListRef">
+    <SearchPageList :get-data-list="getDataList" @reset="queryParamsReset" title="用户列表" ref="searchPageListRef">
       <template #search>
         <el-col :span="6">
           <el-form-item label="用户名">
@@ -79,17 +117,7 @@ const handleCloseDialog = () => {
 
         <el-col :span="6">
           <el-form-item label="状态">
-            <el-select
-              v-model="queryParams.status"
-              placeholder="状态"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            <DictSelect v-model="queryParams.status" :dict-content-list="dictContentList"></DictSelect>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -104,7 +132,7 @@ const handleCloseDialog = () => {
         </el-col>
       </template>
       <template #button>
-        <el-button size="default" icon="Plus" type="primary" @click="handleEdit({realUser:1, status:1, sort:0, createdType:1})"> 新增 </el-button>
+        <el-button size="default" icon="Plus" type="primary" @click="handleEdit({deptId: undefined ,id: undefined ,nickname: undefined ,tenantId: undefined ,username: undefined, realUser:1, status:1, sort:0, createdType:1})"> 新增 </el-button>
         <el-button size="default" icon="Download"> 导出 </el-button>
         <el-button size="default" icon="Refresh" @click="searchPageListRef?.refresh()"> 刷新 </el-button>
         <el-button size="default" icon="Delete" type="danger"> 批量删除 </el-button>

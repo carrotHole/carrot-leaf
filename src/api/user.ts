@@ -2,7 +2,7 @@
 import request from "@/api/request";
 
 // 请求接口/menu/page
-export const userPage = (page: Page, params: MenuQuery) => {
+export const userPage = (page: Page, params: UserQuery) => {
   return request.get<Result>(`/carrot/auUser/page`, {"params":{...page, ... params}})
 }
 
@@ -15,7 +15,7 @@ export const userUpdate = (params: User) => {
   return request.put<boolean>(`/carrot/auUser/update`, params)
 }
 // 删除用户
-export const userRemove = (id: number) => {
+export const userRemove = (id: string) => {
   return request.delete<Result>(`/carrot/auUser/remove/${id}`)
 }
 // 删除用户
