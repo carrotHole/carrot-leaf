@@ -6,7 +6,7 @@ const props = defineProps({
   searchPageListRef: {type: Object, required: true},
 })
 
-const editData = defineModel('editData');
+const editData = defineModel<UserResult>('editData',{default:()=>{}});
 const editDialogVisible_ = defineModel()
 /**
  * 点击编辑保存按钮

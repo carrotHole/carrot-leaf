@@ -1,7 +1,7 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import SessionStoreUtil from '@/util/sessionStoreUtil'
 import MessageUtil from '@/util/MessageUtil'
+import { SessionStoreUtil } from '@/util/SessionStoreUtil'
 
 const whiteList = ['login/username', 'login/token']
 

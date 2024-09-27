@@ -3,7 +3,7 @@ import router from '@/router'
 /**
  * sessionStorage工具类
  */
-export default class SessionStoreUtil {
+export class SessionStoreUtil {
 
   /**
    * 设置sessionStorage
@@ -26,7 +26,7 @@ export default class SessionStoreUtil {
    * 设置token
    * @param token token
    */
-  static async setToken(token: string) :void {
+  static async setToken(token: string){
     await sessionStorage.setItem('token', token)
   }
 

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
-import SessionStoreUtil from '@/util/SessionStoreUtil'
+import {SessionStoreUtil} from '@/util/SessionStoreUtil'
 
 const routers = [
   {
@@ -12,6 +12,11 @@ const routers = [
         name: '用户',
         path: '/user',
         component: () => import('@/views/user/UserIndex.vue')
+      },
+      {
+        name: '应用',
+        path: '/project',
+        component: () => import('@/views/project/ProjectIndex.vue')
       },
       {
         name: '角色',

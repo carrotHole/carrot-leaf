@@ -4,7 +4,7 @@
   import Main from '@/views/layout/component/Main.vue'
   import Footer from '@/views/layout/component/Footer.vue'
   import { onMounted, onUnmounted, ref } from 'vue'
-  import SessionStoreUtil from '@/util/SessionStoreUtil'
+  import {SessionStoreUtil} from '@/util/SessionStoreUtil'
   import router from '@/router'
   import { getUserInfo } from '@/api/loginRequest'
   import {mainRef, mainInit, mainDestroy} from '@/util/MainHeightUtil'

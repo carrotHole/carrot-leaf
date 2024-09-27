@@ -3,7 +3,7 @@
 import { Bell, Fold, Menu } from '@element-plus/icons-vue'
 import { logoutRequest } from '@/api/loginRequest'
 import router from '@/router'
-import SessionStoreUtil from '@/util/SessionStoreUtil'
+import {SessionStoreUtil} from '@/util/SessionStoreUtil'
 
 const handleLogout = async () => {
   await logoutRequest()

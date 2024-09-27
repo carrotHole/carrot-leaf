@@ -39,7 +39,7 @@ interface MenuResult extends Menu{
   createdTime?: Date | null;
 
   // 子菜单集合
-  children?: Menu[];
+  children?: MenuResult[];
 
   // 排序
   sort?: number | null;

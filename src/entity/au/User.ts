@@ -50,6 +50,15 @@ interface UserInfo extends User{
    */
   sort: number | undefined
 
+  /**
+   * 创建时间
+   */
+  createdTime: Date | undefined
+
+  /**
+   * 创建人
+   */
+  createdBy: string | undefined
 }
 
 interface UserQuery extends User {
@@ -60,7 +69,7 @@ interface UserQuery extends User {
    createdTimeStart?: Date | null;
 }
 
-interface UserResult {
+interface UserResult extends User{
   /**
    * 主键
    */

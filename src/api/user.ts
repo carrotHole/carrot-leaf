@@ -1,7 +1,7 @@
 // 引入request
 import request from "@/api/request";
 
-// 请求接口/menu/page
+// 请求接口/user/page
 export const userPage = (page: Page, params: UserQuery) => {
   return request.get<Result>(`/carrot/auUser/page`, {"params":{...page, ... params}})
 }

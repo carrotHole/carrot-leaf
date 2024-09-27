@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import router from '@/router'
 import {loginRequest, getToken} from '@/api/loginRequest'
 import MessageUtil from '@/util/MessageUtil'
-import SessionStoreUtil from '@/util/SessionStoreUtil'
+import {SessionStoreUtil} from '@/util/SessionStoreUtil'
 
 const loginEntity = ref<Login>({
   username: '',
