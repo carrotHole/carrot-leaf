@@ -66,6 +66,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   // 在组件销毁前取消观察
+  mainRemoveResizeCallback(watchMainResize)
+  searchAddResizeCallback(watchSearchResize)
   searchDestroy()
 })
 </script>

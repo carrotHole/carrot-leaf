@@ -28,7 +28,10 @@ const mainDestroy = () =>{
   layoutObserver?.disconnect();
 }
 
-const mainAddResizeCallback = (callback: Function) => resizeCallbacks.push(callback)
+const mainAddResizeCallback = (callback: Function) => {
+  callback(height_)
+  resizeCallbacks.push(callback)
+}
 const mainRemoveResizeCallback = (callback: Function) => resizeCallbacks.splice(resizeCallbacks.indexOf(callback), 1)
 
 export { height_, mainRef, mainInit, mainDestroy, mainAddResizeCallback, mainRemoveResizeCallback}

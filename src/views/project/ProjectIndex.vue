@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue'
 import { ProjectQuery, ProjectInfo, ProjectResult } from '@/entity/au/Project'
-
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import ProjectEditDialog from './ProjectEditDialog.vue'
-
-
-
 import AdminUtil from '@/util/AdminUtil'
 import { getProjectPage, removeProject } from '@/api/project'
 import BeanUtil from '@/util/BeanUtil'
 import MessageUtil from '@/util/MessageUtil'
+import type { FormInstance } from 'element-plus'
 
 const queryParams = ref<ProjectQuery>(new ProjectQuery())
-const searchPageListRef = shallowRef<InstanceType<typeof SearchPageList>>()
+const searchPageListRef = ref<FormInstance>({})
 const editData = ref<ProjectInfo>(new ProjectInfo(0))
 const editDialogVisible = ref(false)
 const editDialogUpdate = ref(false)
@@ -61,7 +58,7 @@ const handDelete = async (data: UserInfo) => {
 
 <template>
   <div>
-    <SearchPageList :get-data-list="getDataList" @reset="queryParamsReset" title="用户列表" ref="searchPageListRef">
+    <SearchPageList :get-data-list="getDataList" @reset="queryParamsReset" title="应用列表" ref="searchPageListRef">
       <template #search>
         <el-col :span="6">
           <el-form-item label="项目名">
@@ -74,6 +71,7 @@ const handDelete = async (data: UserInfo) => {
             <el-input v-model="queryParams.status" />
           </el-form-item>
         </el-col>
+
       </template>
       <template #button>
         <el-button size="default" icon="Plus" type="primary" @click="handleEdit(undefined, false)"> 新增 </el-button>

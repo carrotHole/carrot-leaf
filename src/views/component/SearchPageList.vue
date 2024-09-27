@@ -6,20 +6,26 @@ import {
   searchRef,
   searchInit,
   searchDestroy,
-  searchAddResizeCallback
+  searchAddResizeCallback, searchRemoveResizeCallback
 } from '@/util/SearchHeightUtil'
 import { mainAddResizeCallback, mainRemoveResizeCallback, height_ } from '@/util/MainHeightUtil'
 
 
 const props = withDefaults(defineProps<{
-  title: string
-  showSearch:boolean
-  pageSize: number
+  title?: string|undefined
+  showSearch?:boolean|undefined
+  showPage?:boolean|undefined
+  pageSize?: number|undefined
+  /**
+   * 获取数据列表
+   */
   getDataList:(page: Page)=>PageData
 }>(), {
   title: '',
-  showSearch:true,
+  showSearch: true,
+  showPage: true,
   pageSize: 20,
+  showPage: true
 })
 
 const dataList_ = ref<UserResult[]>([])
@@ -48,10 +54,15 @@ const getDataList_ = async () => {
     }
   )
 
-  dataList_.value = data.records
-  totalRow_.value = data.totalRow
-  pageNumber_.value = data.pageNumber
-  pageSize_.value = data.pageSize
+  if (props.showPage){
+    dataList_.value = data.records
+    totalRow_.value = data.totalRow
+    pageNumber_.value = data.pageNumber
+    pageSize_.value = data.pageSize
+  }else {
+    dataList_.value = data
+  }
+
   pageLoading_.value = false
 }
 
@@ -67,7 +78,9 @@ const pageNumberChanged = (pNumber: number) => {
 
 // 计算高度
 const calcHeight = () => {
-  let number = mainHeight.value - searchHeight.value - 142
+  let number = mainHeight.value - searchHeight.value - (props.showPage ? 142 : 86)
+  // console.log('mainHeight-'+mainHeight.value)
+  // console.log('searchHeight-'+searchHeight.value)
   pageListHeight.value = number
 }
 
@@ -89,6 +102,7 @@ const watchMainResize = (height: number) => {
 }
 
 onMounted(() => {
+  // console.log('pageList mounted')
   searchInit()
   searchAddResizeCallback(watchSearchResize)
   mainAddResizeCallback(watchMainResize)
@@ -97,8 +111,10 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  // console.log('pageList unmounted')
   // 在组件销毁前取消观察
   mainRemoveResizeCallback(watchMainResize)
+  searchRemoveResizeCallback(watchSearchResize)
   searchDestroy()
 })
 
@@ -125,7 +141,7 @@ defineExpose({
         <div v-show="showSearch_">
           <!--    起padding-top作用,防止展开动画卡顿    -->
           <div style="height: 16px"></div>
-          <el-form label-width="20%" size="default">
+          <el-form label-width="auto" size="default">
             <el-row :gutter="16">
               <slot name="search"></slot>
 
@@ -151,7 +167,7 @@ defineExpose({
         </el-table>
 
       </div>
-      <div class="page-list-foot">
+      <div class="page-list-foot" v-if="props.showPage">
         <el-pagination
           :current-page="pageNumber_"
           :page-size="pageSize_"

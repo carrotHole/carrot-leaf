@@ -9,15 +9,21 @@ const routers = [
     component: () => import('@/views/layout/LayoutIndex.vue'),
     children: [
       {
-        name: '用户',
-        path: '/user',
-        component: () => import('@/views/user/UserIndex.vue')
+        name: '租户',
+        path: '/tenant',
+        component: () => import('@/views/tenant/TenantIndex.vue')
       },
       {
         name: '应用',
         path: '/project',
         component: () => import('@/views/project/ProjectIndex.vue')
       },
+      {
+        name: '用户',
+        path: '/user',
+        component: () => import('@/views/user/UserIndex.vue')
+      },
+
       {
         name: '角色',
         path: '/role',

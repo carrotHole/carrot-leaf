@@ -1,7 +1,6 @@
 // 引入request
 import request from "@/api/request";
-import type { ProjectInfo } from '@/entity/au/Project'
-import { ProjectQuery } from '@/entity/au/Project'
+import { ProjectQuery, ProjectInfo } from '@/entity/au/Project'
 
 /**
  * 分页接口

@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import MessageUtil from '@/util/MessageUtil'
-import { saveProject, updateProject } from '@/api/project'
-import type { ProjectInfo } from '@/entity/au/Project'
+import { saveTenant, updateTenant } from '@/api/tenant'
+import type { TenantInfo } from '@/entity/au/Tenant'
 
 const props = defineProps({
   searchPageListRef: {type: Object, required: true},
 })
 
-const editData = defineModel<ProjectInfo>('editData',{default:()=>{}});
+const editData = defineModel<TenantInfo>('editData',{default:()=>{}});
 const editDialogUpdate_ = defineModel<boolean>('editDialogUpdate')
 const editDialogVisible_ = defineModel()
 /**
  * 点击编辑保存按钮
  */
-const handleEditSubmit = async (data: ProjectInfo|undefined) => {
+const handleEditSubmit = async (data: TenantInfo|undefined) => {
   if (!data){
     return
   }
-  editDialogUpdate_.value ? await updateProject(data) : await saveProject(data)
+  editDialogUpdate_.value ? await updateTenant(data) : await saveTenant(data)
   editDialogVisible_.value = false
   MessageUtil.success('保存成功')
   props.searchPageListRef.refresh()
@@ -26,13 +26,28 @@ const handleEditSubmit = async (data: ProjectInfo|undefined) => {
 </script>
 
 <template>
-  <el-dialog v-model="editDialogVisible_" draggable title="用户编辑" width="500">
+  <el-dialog v-model="editDialogVisible_" draggable title="用户编辑" width="400">
     <el-form :data="editData" label-width="auto" style="padding: 16px">
       <el-row>
 
         <el-col :span="24">
-          <el-form-item label="应用名称">
-            <el-input v-model="editData.projectName" />
+          <el-form-item label="租户名称">
+            <el-input v-model="editData.tenantName" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="租户标志">
+            <el-input v-model="editData.tenantMark" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="联系人">
+            <el-input v-model="editData.linkUser" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="联系电话">
+            <el-input v-model="editData.linkCellphone" />
           </el-form-item>
         </el-col>
 
@@ -44,12 +59,6 @@ const handleEditSubmit = async (data: ProjectInfo|undefined) => {
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="排序">
-            <el-input-number controls-position="right" v-model="editData.sort" />
-          </el-form-item>
-        </el-col>
-
       </el-row>
 
     </el-form>

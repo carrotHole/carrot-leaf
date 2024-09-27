@@ -14,12 +14,12 @@ const menuTree = ref<MenuResult[]>([
     id: '1',
     children: [
       {
-        menuName: '用户',
-        icon: 'UserFilled',
+        menuName: '租户',
+        icon: 'Grid',
         permissionCode: '',
         menuType: 2,
-        id: '11',
-        menuUrl:"/user"
+        id: '3233',
+        menuUrl:"/tenant"
       },
       {
         menuName: '应用',
@@ -30,20 +30,29 @@ const menuTree = ref<MenuResult[]>([
         menuUrl:"/project"
       },
       {
-        menuName: '角色',
-        icon: 'Discount',
-        permissionCode: '',
-        menuType: 2,
-        id: '12',
-        menuUrl:"/role"
-      },
-      {
         menuName: '菜单',
         icon: 'OfficeBuilding',
         permissionCode: '',
         menuType: 2,
         id: '13',
         menuUrl:"/menu"
+      },
+      {
+        menuName: '用户',
+        icon: 'User',
+        permissionCode: '',
+        menuType: 2,
+        id: '11',
+        menuUrl:"/user"
+      },
+
+      {
+        menuName: '角色',
+        icon: 'Discount',
+        permissionCode: '',
+        menuType: 2,
+        id: '12',
+        menuUrl:"/role"
       }
     ]
   },

@@ -28,7 +28,10 @@ const searchDestroy = () =>{
   layoutObserver?.disconnect();
 }
 
-const searchAddResizeCallback = (callback: Function) => resizeCallbacks.push(callback)
+const searchAddResizeCallback = (callback: Function) => {
+  callback(height_)
+  resizeCallbacks.push(callback)
+}
 const searchRemoveResizeCallback = (callback: Function) => resizeCallbacks.splice(resizeCallbacks.indexOf(callback), 1)
 
 export { searchRef, searchInit, searchDestroy, searchAddResizeCallback, searchRemoveResizeCallback}

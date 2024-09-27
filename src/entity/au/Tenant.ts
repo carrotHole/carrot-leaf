@@ -5,6 +5,7 @@ export class Tenant{
   linkUser: string | undefined
   linkCellphone: string | undefined
   createdTime : Date | undefined
+  status: number | undefined
 }
 
 export class TenantQuery extends Tenant{
@@ -14,7 +15,12 @@ export class TenantQuery extends Tenant{
 
 export class TenantInfo extends Tenant{
   createdBy: string | undefined
-  sort: number | undefined
+
+
+  constructor(status= 0 ) {
+    super()
+    this.status = status
+  }
 }
 
 export class TenantResult extends Tenant{

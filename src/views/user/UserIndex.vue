@@ -9,8 +9,9 @@ import BeanUtil from '@/util/BeanUtil'
 import { listContentByType } from '@/api/dict'
 import DictClassConstant from '@/constant/DictClassConstant'
 import DictSelect from '@/views/component/DictSelect.vue'
+import type { FormInstance } from 'element-plus'
 
-const searchPageListRef = shallowRef<InstanceType<typeof SearchPageList>>()
+const searchPageListRef = ref<FormInstance>({})
 const queryParams = ref<UserQuery>({
   createdType: undefined,
   deptId: undefined,
