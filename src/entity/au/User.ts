@@ -66,7 +66,7 @@ interface UserQuery extends User {
    * 创建时间
    */
    createdTimeEnd?: Date | null;
-   createdTimeStart?: Date | null;
+   createdTimeBegin?: Date | null;
 }
 
 interface UserResult extends User{

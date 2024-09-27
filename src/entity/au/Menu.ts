@@ -58,6 +58,6 @@ interface MenuQuery extends Menu {
 
   // 创建时间
   createdTimeEnd?: Date | null;
-  createdTimeStart?: Date | null;
+  createdTimeBegin?: Date | null;
 
 }
