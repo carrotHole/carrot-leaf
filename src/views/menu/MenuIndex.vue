@@ -1,170 +1,132 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { menuPage } from '@/api/menu'
-import { ArrowRightBold, ArrowDownBold } from '@element-plus/icons-vue'
-import { ElCollapseTransition } from 'element-plus'
-import {
-  searchRef,
-  searchInit,
-  searchDestroy,
-  searchAddResizeCallback
-} from '@/util/SearchHeightUtil'
-import { mainAddResizeCallback, mainRemoveResizeCallback, height_ } from '@/util/MainHeightUtil'
+import { onMounted, ref, shallowRef } from 'vue'
+import { MenuQuery, MenuInfo, MenuResult } from '@/entity/au/Menu'
+import SearchPageList from '@/views/component/SearchPageList.vue'
+import MenuEditDialog from './MenuEditDialog.vue'
+import AdminUtil from '@/util/AdminUtil'
+import { getMenuTree, removeMenu } from '@/api/menu'
+import BeanUtil from '@/util/BeanUtil'
+import MessageUtil from '@/util/MessageUtil'
+import type { FormInstance } from 'element-plus'
+import type { ProjectResult } from '@/entity/au/Project'
+import { getProjectList } from '@/api/project'
 
-const dataList = ref<MenuResult[]>([])
-const pageSize = ref(10)
-const totalRow = ref(0)
-const pageNumber = ref(1)
-const showSearch = ref(true)
-const searchCardRef = ref(100)
-const mainHeight = ref(height_)
-const searchHeight = ref(50)
-const pageListHeight = ref(200)
+const queryParams = ref<MenuQuery>(new MenuQuery())
+const searchPageListRef = ref<FormInstance>({})
+const editData = ref<MenuInfo>(new MenuInfo(0))
+const editDialogVisible = ref(false)
+const editDialogUpdate = ref(false)
+const projectList = ref<ProjectResult[]>()
 
-const queryParams = ref<MenuQuery>({})
-
-const getDataList = async () => {
-  const { data } = await menuPage(
-    {
-      pageNumber: pageNumber.value,
-      pageSize: pageSize.value
-    },
-    queryParams.value
-  )
-}
-
-// 计算高度
-const calcHeight = () => {
-  let number = mainHeight.value - searchHeight.value - 36
-  pageListHeight.value = number
+/**
+ * 获取列表数据
+ * @param page
+ */
+const getDataList = async (page: Page) => {
+  if (!queryParams.value?.projectId){
+    return []
+  }
+  console.log(queryParams.value?.projectId)
+  const { data } = await getMenuTree(queryParams.value?.projectId)
+  return data
 }
 
 /**
- * 监听pageList容器变化
- * @param height
+ * 点击重置查询按钮
  */
-const watchSearchResize = (height: number) => {
-  searchHeight.value = height
-  calcHeight()
+const queryParamsReset = () => {
+  queryParams.value = new MenuQuery()
+  searchPageListRef.value?.refresh()
+}
+
+/**
+ * 点击编辑/新增按钮
+ */
+const handleEdit = (row: MenuResult|undefined, update: boolean) => {
+  editDialogUpdate.value = update
+  editData.value = row ? BeanUtil.deepCopy(row) : new MenuInfo(0)
+  editDialogVisible.value = true
 }
 /**
- * 监听main容器高度变化
- * @param height
+ * 点击删除按钮
  */
-const watchMainResize = (height: number) => {
-  mainHeight.value = height
-  calcHeight()
+const handDelete = async (data: UserInfo) => {
+  if (await MessageUtil.confirm('确定删除当前用户？') ){
+    if (!data.id){
+      return
+    }
+    await removeMenu(data.id)
+    MessageUtil.success('删除成功')
+    searchPageListRef.value?.refresh()
+  }
 }
 
-onMounted(() => {
-  searchInit()
-  searchAddResizeCallback(watchSearchResize)
-  mainAddResizeCallback(watchMainResize)
-  calcHeight()
-  getDataList()
-})
+/**
+ * 获取应用列表
+ */
+const getProject = async () => {
+  // 获取应用考评表
+  const { data } = await getProjectList({})
+  if (data){
+    // 列表第一个为默认应用
+    queryParams.value.projectId = data[0].id
+  }
+  // 赋值
+  projectList.value = data
+  // 获取菜单列表
+  if (!searchPageListRef.value.getList()){
+    searchPageListRef.value.refresh()
+  }
+}
 
-onUnmounted(() => {
-  // 在组件销毁前取消观察
-  mainRemoveResizeCallback(watchMainResize)
-  searchAddResizeCallback(watchSearchResize)
-  searchDestroy()
+onMounted(async ()=>{
+  console.log('mounted')
+  await getProject()
 })
 </script>
 
 <template>
-  <div class="main-container">
-    <div class="search-card" ref="searchRef">
-<!--      <div @click="showSearch = !showSearch">-->
-<!--        <el-button link>-->
-<!--          <el-icon>-->
-<!--            <ArrowRightBold v-if="!showSearch" />-->
-<!--            <ArrowDownBold v-if="showSearch" />-->
-<!--          </el-icon>-->
-<!--          &nbsp;搜索-->
-<!--        </el-button>-->
-<!--      </div>-->
-<!--      <el-collapse-transition>-->
-<!--        <div v-show="showSearch">-->
-<!--          &lt;!&ndash;    起padding-top作用,防止展开动画卡顿    &ndash;&gt;-->
-<!--          <div style="height: 16px"></div>-->
-<!--          <el-form :model="queryParams" label-width="20%" size="default">-->
-<!--            <el-row :gutter="16">-->
-<!--              <el-col :span="6">-->
-<!--                <el-form-item label="菜单名称">-->
-<!--                  <el-input v-model="queryParams.menuName" />-->
-<!--                </el-form-item>-->
-<!--              </el-col>-->
+  <div>
+    <SearchPageList :get-data-list="getDataList" @reset="queryParamsReset" title="菜单树" ref="searchPageListRef" :showPage="false">
+      <template #search>
+        <el-col :span="6">
+          <el-form-item label="所属应用">
+            <el-input v-model="queryParams.tenantName" />
+          </el-form-item>
+        </el-col>
+      </template>
+      <template #button>
+        <el-button size="default" icon="Plus" type="primary" @click="handleEdit(undefined, false)"> 新增 </el-button>
+        <el-button size="default" icon="Download"> 导出 </el-button>
+        <el-button size="default" icon="Refresh" @click="searchPageListRef?.refresh()"> 刷新 </el-button>
+        <el-button size="default" icon="Delete" type="danger"> 批量删除 </el-button>
+      </template>
+      <template #pageList>
+        <el-table-column prop="id" label="主键" />
+        <el-table-column prop="tenantName" label="租户名称"  />
+        <el-table-column prop="tenantMark" label="租户标志"  />
+        <el-table-column prop="linkUser" label="联系人"  />
+        <el-table-column prop="linkCellphone" label="联系电话"  />
+        <el-table-column prop="statusValue" label="状态"  />
+        <el-table-column prop="createdTime" label="创建时间" />
+        <el-table-column  label="操作"  fixed="right" align="center">
+          <template #default="{ row }">
+            <el-button @click="handleEdit(row, true)" type="primary" v-if="!AdminUtil.isSuperAdmin(row.username)">编辑</el-button>
+            <el-button @click="handDelete(row)" type="danger" v-if="!AdminUtil.isSuperAdmin(row.username)">删除</el-button>
+            <!--            <el-button @click="handleUpdateStatus(row,0,'禁用')" v-if="row.status == 1 && !AdminUtil.isAdmin(row.username)">禁用</el-button>-->
+            <!--            <el-button @click="handleUpdateStatus(row, 1, '解禁')" v-if="row.status !== 1 && !AdminUtil.isAdmin(row.username)">解禁</el-button>-->
+          </template>
+        </el-table-column>
+      </template>
+    </SearchPageList>
+    <!--  新增修改  -->
+    <MenuEditDialog :edit-data="editData" :editDialogUpdate="editDialogUpdate" v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" ></MenuEditDialog>
 
-<!--              <el-col :span="6">-->
-<!--                <el-form-item label="路由地址">-->
-<!--                  <el-input v-model="queryParams.menuName" />-->
-<!--                </el-form-item>-->
-<!--              </el-col>-->
-
-<!--              <el-col :span="6">-->
-<!--                <el-form-item label="路径">-->
-<!--                  <el-input v-model="queryParams.menuName" />-->
-<!--                </el-form-item>-->
-<!--              </el-col>-->
-
-<!--              <el-col :span="6">-->
-<!--                <el-form-item label="父主键">-->
-<!--                  <el-input v-model="queryParams.menuName" />-->
-<!--                </el-form-item>-->
-<!--              </el-col>-->
-<!--              <el-col :span="6">-->
-<!--                <el-form-item label="父主键">-->
-<!--                  <el-input v-model="queryParams.menuName" />-->
-<!--                </el-form-item>-->
-<!--              </el-col>-->
-
-<!--              <el-col :span="6" class="search-button">-->
-<!--                <el-button plain icon="Refresh">重置</el-button>-->
-<!--                <el-button type="primary" plain icon="Search">查询</el-button>-->
-<!--              </el-col>-->
-<!--            </el-row>-->
-<!--          </el-form>-->
-<!--        </div>-->
-<!--      </el-collapse-transition>-->
-    </div>
+    <!--  详情dialog  -->
 
   </div>
 </template>
 
 <style scoped>
-.search-card {
-  width: 50%;
-  background-color: #ffffff;
-  border-radius: 5px;
-  padding: 12px 16px;
 
-  .el-col {
-  }
-
-  .search-button {
-    margin-left: auto;
-    text-align: right;
-  }
-}
-
-.page-list {
-  border-radius: 5px;
-  margin-top: 16px;
-  background-color: #fff;
-  height: 200px;
-
-  .page-list-title {
-    padding: 12px 16px 2px;
-    display: flex;
-    justify-content: space-between;
-    height: 50px;
-    font-size: 16px;
-  }
-
-  .page-list-content{
-    padding: 0 12px ;
-  }
-
-}
 </style>

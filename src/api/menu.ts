@@ -1,7 +1,33 @@
 // 引入request
 import request from "@/api/request";
+import type { MenuInfo } from '@/entity/au/Menu'
 
-// 请求接口/menu/page
-export const menuPage = (page: Page, params: MenuQuery) => {
-  return request.get<Result>(`/carrot/auMenu/page`, {"params":{...page, ... params}})
+/**
+ * 获取应用下所有菜单树
+ * @param projectId
+ */
+export const getMenuTree = (projectId: string) => {
+  return request.get<Result>(`/carrot/auMenu/getTree/${projectId}`)
+}
+
+
+/**
+ * 新增菜单
+ */
+export const addMenu = (data: MenuInfo) => {
+  return request.post<Result>(`/carrot/auMenu/save`, data)
+}
+
+/**
+ * 更新菜单
+ */
+export const updateMenu = (data: MenuInfo) => {
+  return request.post<Result>(`/carrot/auMenu/update`, data)
+}
+
+/**
+ * 删除菜单
+ */
+export const removeMenu = (id: string) => {
+  return request.delete<Result>(`/carrot/auMenu/remove/${id}`)
 }

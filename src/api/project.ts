@@ -10,6 +10,13 @@ export const getProjectPage = (page: Page, params: ProjectQuery) => {
 }
 
 /**
+ * 列表接口
+ */
+export const getProjectList = (params: ProjectQuery) => {
+  return request.get<Result>(`/carrot/auProject/list`, {"params": params})
+}
+
+/**
  * 删除接口
  */
 export const removeProject = (id: string) => {
