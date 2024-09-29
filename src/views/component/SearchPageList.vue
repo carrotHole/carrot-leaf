@@ -162,7 +162,7 @@ defineExpose({
         </span>
       </div>
       <div class="page-list-content" >
-        <el-table :data="dataList_" :height="pageListHeight" v-loading="pageLoading_">
+        <el-table :data="dataList_" :height="pageListHeight" v-loading="pageLoading_" row-key="id">
             <slot name="pageList"></slot>
         </el-table>
 

@@ -14,7 +14,7 @@ export const getMenuTree = (projectId: string) => {
 /**
  * 新增菜单
  */
-export const addMenu = (data: MenuInfo) => {
+export const saveMenu = (data: MenuInfo) => {
   return request.post<Result>(`/carrot/auMenu/save`, data)
 }
 

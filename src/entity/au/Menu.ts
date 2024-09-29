@@ -14,7 +14,7 @@ export class Menu {
   // 应用主键
   projectId: string | undefined
   // 菜单类型
-  menuType: number | undefined
+  menuType: string | undefined
   // 父主键
   parentId: string | undefined
   // 租户主键
@@ -24,7 +24,14 @@ export class Menu {
 }
 
 export class MenuInfo extends Menu {
-  // 图标
+
+
+  constructor(status=0) {
+    super()
+    this.status = status
+  }
+
+// 图标
   icon: string | undefined
   // 排序
   sort: number | null | undefined

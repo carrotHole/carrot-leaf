@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ProjectSelect from '@/views/component/ProjectSelect.vue'
 import { onMounted, ref, shallowRef } from 'vue'
 import { MenuQuery, MenuInfo, MenuResult } from '@/entity/au/Menu'
 import SearchPageList from '@/views/component/SearchPageList.vue'
@@ -8,8 +9,10 @@ import { getMenuTree, removeMenu } from '@/api/menu'
 import BeanUtil from '@/util/BeanUtil'
 import MessageUtil from '@/util/MessageUtil'
 import type { FormInstance } from 'element-plus'
-import type { ProjectResult } from '@/entity/au/Project'
+import { ProjectQuery, type ProjectResult } from '@/entity/au/Project'
 import { getProjectList } from '@/api/project'
+import { getDictContentList } from '@/api/dict'
+import DictClassConstant from '@/constant/DictClassConstant'
 
 const queryParams = ref<MenuQuery>(new MenuQuery())
 const searchPageListRef = ref<FormInstance>({})
@@ -17,6 +20,7 @@ const editData = ref<MenuInfo>(new MenuInfo(0))
 const editDialogVisible = ref(false)
 const editDialogUpdate = ref(false)
 const projectList = ref<ProjectResult[]>()
+const menuTypeList = ref<DictContent>()
 
 /**
  * 获取列表数据
@@ -35,7 +39,9 @@ const getDataList = async (page: Page) => {
  * 点击重置查询按钮
  */
 const queryParamsReset = () => {
+  const temp = queryParams.value.projectId
   queryParams.value = new MenuQuery()
+  queryParams.value.projectId = temp
   searchPageListRef.value?.refresh()
 }
 
@@ -44,7 +50,14 @@ const queryParamsReset = () => {
  */
 const handleEdit = (row: MenuResult|undefined, update: boolean) => {
   editDialogUpdate.value = update
-  editData.value = row ? BeanUtil.deepCopy(row) : new MenuInfo(0)
+  if (row){
+    editData.value =BeanUtil.deepCopy(row)
+  }else {
+    const r = new MenuInfo();
+    r.projectId = queryParams.value?.projectId;
+    r.menuType = '1';
+    editData.value = r;
+  }
   editDialogVisible.value = true
 }
 /**
@@ -66,11 +79,14 @@ const handDelete = async (data: UserInfo) => {
  */
 const getProject = async () => {
   // 获取应用考评表
-  const { data } = await getProjectList({})
-  if (data){
-    // 列表第一个为默认应用
-    queryParams.value.projectId = data[0].id
+  const { data } = await getProjectList(new ProjectQuery())
+  if (!data){
+    return
   }
+
+  // 列表第一个为默认应用
+  queryParams.value.projectId = data[0].id
+
   // 赋值
   projectList.value = data
   // 获取菜单列表
@@ -79,8 +95,18 @@ const getProject = async () => {
   }
 }
 
+/**
+ * 获取菜单类型
+ */
+
+const getMenuType = async () => {
+  let {data} = await getDictContentList('MENU_TYPE', DictClassConstant.SYS)
+  menuTypeList.value = data
+}
+
+
 onMounted(async ()=>{
-  console.log('mounted')
+  getMenuType()
   await getProject()
 })
 </script>
@@ -91,7 +117,7 @@ onMounted(async ()=>{
       <template #search>
         <el-col :span="6">
           <el-form-item label="所属应用">
-            <el-input v-model="queryParams.tenantName" />
+            <ProjectSelect v-model="queryParams.projectId" :projectList="projectList" :clearable="false"></ProjectSelect>
           </el-form-item>
         </el-col>
       </template>
@@ -102,13 +128,12 @@ onMounted(async ()=>{
         <el-button size="default" icon="Delete" type="danger"> 批量删除 </el-button>
       </template>
       <template #pageList>
-        <el-table-column prop="id" label="主键" />
-        <el-table-column prop="tenantName" label="租户名称"  />
-        <el-table-column prop="tenantMark" label="租户标志"  />
-        <el-table-column prop="linkUser" label="联系人"  />
-        <el-table-column prop="linkCellphone" label="联系电话"  />
+        <el-table-column prop="menuName" label="名称"  />
+        <el-table-column prop="permissionCode" label="权限编码"  />
+        <el-table-column prop="menuUrl" label="菜单路径"  />
+        <el-table-column prop="componentPath" label="组件地址"  />
         <el-table-column prop="statusValue" label="状态"  />
-        <el-table-column prop="createdTime" label="创建时间" />
+        <el-table-column prop="menuType" label="类型" />
         <el-table-column  label="操作"  fixed="right" align="center">
           <template #default="{ row }">
             <el-button @click="handleEdit(row, true)" type="primary" v-if="!AdminUtil.isSuperAdmin(row.username)">编辑</el-button>
@@ -120,7 +145,7 @@ onMounted(async ()=>{
       </template>
     </SearchPageList>
     <!--  新增修改  -->
-    <MenuEditDialog :edit-data="editData" :editDialogUpdate="editDialogUpdate" v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" ></MenuEditDialog>
+    <MenuEditDialog :edit-data="editData" :editDialogUpdate="editDialogUpdate" v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" :menuTypeList="menuTypeList"></MenuEditDialog>
 
     <!--  详情dialog  -->
 

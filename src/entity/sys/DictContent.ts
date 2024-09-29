@@ -1,10 +1,10 @@
-interface DictContent{
+export class DictContent{
 
-  id : string
-  type:string
-  mark:string
-  name:string
-  remark:string
-  tenantId:string
-  sort:number
+  id : string|undefined
+  type:string|undefined
+  mark:string|undefined
+  name:string|undefined
+  remark:string|undefined
+  tenantId:string|undefined
+  sort:number|undefined
 }

@@ -45,7 +45,7 @@ const handleEditSubmit = async (data: UserInfo) => {
             <el-input-number v-model="editData.sort" />
           </el-form-item>
         </el-col>
-        <el-col>
+        <el-col :span="12">
           <el-form-item label="真实用户">
             <el-radio-group  v-model="editData.realUser"  :disabled="editData.id">
               <el-radio :value="0" size="large">否</el-radio>
