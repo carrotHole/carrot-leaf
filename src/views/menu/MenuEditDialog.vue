@@ -4,6 +4,7 @@ import { saveMenu, updateMenu } from '@/api/menu'
 import type { DictContent } from '@/entity/sys/DictContent'
 import type { MenuInfo } from '@/entity/au/Menu'
 import DictSelect from '@/views/component/DictSelect.vue'
+import MenuSelect from '@/views/component/MenuSelect.vue'
 
 const props = defineProps({
   searchPageListRef: { type: Object, required: true },
@@ -14,8 +15,9 @@ const editData = defineModel<MenuInfo>('editData', {
   default: () => {
   }
 })
-const editDialogUpdate_ = defineModel<boolean>('editDialogUpdate')
 const editDialogVisible_ = defineModel()
+const editDialogUpdate_ = defineModel<boolean>('editDialogUpdate')
+const menuList = defineModel('menuList',)
 /**
  * 点击编辑保存按钮
  */
@@ -38,7 +40,7 @@ const handleEditSubmit = async (data: MenuInfo | undefined) => {
 
         <el-col :span="12">
           <el-form-item label="父级菜单">
-            <el-input v-model="editData.parentId" placeholder="顶级菜单"/>
+            <MenuSelect v-model="editData.parentId" :menu-list="menuList" placeholder="顶级菜单"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -77,6 +79,11 @@ const handleEditSubmit = async (data: MenuInfo | undefined) => {
         <el-col :span="12">
           <el-form-item label="图标">
             <el-input v-model="editData.icon" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="排序">
+            <el-input-number controls-position="right" v-model="editData.sort" />
           </el-form-item>
         </el-col>
       </el-row>

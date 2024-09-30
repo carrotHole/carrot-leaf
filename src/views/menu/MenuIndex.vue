@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ProjectSelect from '@/views/component/ProjectSelect.vue'
 import { onMounted, ref, shallowRef } from 'vue'
-import { MenuQuery, MenuInfo, MenuResult } from '@/entity/au/Menu'
+import { MenuQuery, MenuInfo, MenuResult, MenuTreeResult } from '@/entity/au/Menu'
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import MenuEditDialog from './MenuEditDialog.vue'
 import AdminUtil from '@/util/AdminUtil'
@@ -13,6 +13,8 @@ import { ProjectQuery, type ProjectResult } from '@/entity/au/Project'
 import { getProjectList } from '@/api/project'
 import { getDictContentList } from '@/api/dict'
 import DictClassConstant from '@/constant/DictClassConstant'
+import type { DictContent } from '@/entity/sys/DictContent'
+import { MenuUtil } from '@/util/MenuUtil'
 
 const queryParams = ref<MenuQuery>(new MenuQuery())
 const searchPageListRef = ref<FormInstance>({})
@@ -21,6 +23,7 @@ const editDialogVisible = ref(false)
 const editDialogUpdate = ref(false)
 const projectList = ref<ProjectResult[]>()
 const menuTypeList = ref<DictContent>()
+const menuList = ref<MenuTreeResult[]>()
 
 /**
  * 获取列表数据
@@ -30,8 +33,9 @@ const getDataList = async (page: Page) => {
   if (!queryParams.value?.projectId){
     return []
   }
-  console.log(queryParams.value?.projectId)
+  // console.log(queryParams.value?.projectId)
   const { data } = await getMenuTree(queryParams.value?.projectId)
+  menuList.value = MenuUtil.filterMenu(data)
   return data
 }
 
@@ -56,6 +60,7 @@ const handleEdit = (row: MenuResult|undefined, update: boolean) => {
     const r = new MenuInfo();
     r.projectId = queryParams.value?.projectId;
     r.menuType = '1';
+    r.sort = 1;
     editData.value = r;
   }
   editDialogVisible.value = true
@@ -89,8 +94,11 @@ const getProject = async () => {
 
   // 赋值
   projectList.value = data
+  console.log('---')
+  console.log(searchPageListRef.value.getList())
+  console.log('---')
   // 获取菜单列表
-  if (!searchPageListRef.value.getList()){
+  if (!searchPageListRef.value.getList() || searchPageListRef.value.getList().length === 0){
     searchPageListRef.value.refresh()
   }
 }
@@ -145,7 +153,7 @@ onMounted(async ()=>{
       </template>
     </SearchPageList>
     <!--  新增修改  -->
-    <MenuEditDialog :edit-data="editData" :editDialogUpdate="editDialogUpdate" v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" :menuTypeList="menuTypeList"></MenuEditDialog>
+    <MenuEditDialog :edit-data="editData" :editDialogUpdate="editDialogUpdate" v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" :menuTypeList="menuTypeList" :menuList="menuList"></MenuEditDialog>
 
     <!--  详情dialog  -->
 
