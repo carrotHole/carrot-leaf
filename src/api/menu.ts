@@ -22,7 +22,7 @@ export const saveMenu = (data: MenuInfo) => {
  * 更新菜单
  */
 export const updateMenu = (data: MenuInfo) => {
-  return request.post<Result>(`/carrot/auMenu/update`, data)
+  return request.put<Result>(`/carrot/auMenu/update`, data)
 }
 
 /**

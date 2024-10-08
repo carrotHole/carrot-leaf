@@ -16,6 +16,8 @@ const props = withDefaults(defineProps<{
   showSearch?:boolean|undefined
   showPage?:boolean|undefined
   pageSize?: number|undefined
+  showResetButton?: boolean|undefined
+  showSearchButton?: boolean|undefined
   /**
    * 获取数据列表
    */
@@ -25,7 +27,8 @@ const props = withDefaults(defineProps<{
   showSearch: true,
   showPage: true,
   pageSize: 20,
-  showPage: true
+  showResetButton: true,
+  showSearchButton: true,
 })
 
 const dataList_ = ref<UserResult[]>([])
@@ -146,8 +149,8 @@ defineExpose({
               <slot name="search"></slot>
 
               <el-col :span="6" class="search-button">
-                <el-button plain icon="Refresh" @click="emit('reset')">重置</el-button>
-                <el-button type="primary" plain icon="Search" @click="getDataList_">查询</el-button>
+                <el-button plain icon="Refresh" v-if="props.showResetButton" @click="emit('reset')">重置</el-button>
+                <el-button type="primary" plain v-if="props.showSearchButton" icon="Search" @click="getDataList_">查询</el-button>
               </el-col>
             </el-row>
           </el-form>

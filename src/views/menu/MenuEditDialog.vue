@@ -53,7 +53,7 @@ const handleEditSubmit = async (data: MenuInfo | undefined) => {
             <DictSelect v-model="editData.menuType" :dict-content-list="menuTypeList"></DictSelect>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12"  v-if="editData.menuType !== '0'">
           <el-form-item label="权限编码">
             <el-input v-model="editData.permissionCode" />
           </el-form-item>

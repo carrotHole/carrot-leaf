@@ -23,6 +23,11 @@ const routers = [
         path: '/user',
         component: () => import('@/views/user/UserIndex.vue')
       },
+      {
+        name: '部门',
+        path: '/dept',
+        component: () => import('@/views/dept/DeptIndex.vue')
+      },
 
       {
         name: '角色',

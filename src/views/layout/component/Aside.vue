@@ -38,6 +38,14 @@ const menuTree = ref<MenuResult[]>([
         menuUrl:"/menu"
       },
       {
+        menuName: '部门',
+        icon: 'House',
+        permissionCode: '',
+        menuType: 2,
+        id: '32333',
+        menuUrl:"/dept"
+      },
+      {
         menuName: '用户',
         icon: 'User',
         permissionCode: '',
