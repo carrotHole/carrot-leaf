@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
   /**
    * 获取数据列表
    */
-  getDataList:(page: Page)=>PageData
+  getDataList:(page: Page, refresh: boolean)=>PageData<>
 }>(), {
   title: '',
   showSearch: true,
@@ -54,7 +54,7 @@ const getDataList_ = async () => {
     {
       pageNumber: pageNumber_.value,
       pageSize: pageSize_.value
-    }
+    },true
   )
 
   if (props.showPage){

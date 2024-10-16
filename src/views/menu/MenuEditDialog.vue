@@ -5,6 +5,7 @@ import type { DictContent } from '@/entity/sys/DictContent'
 import type { MenuInfo } from '@/entity/au/Menu'
 import DictSelect from '@/views/component/DictSelect.vue'
 import MenuSelect from '@/views/component/MenuSelect.vue'
+import MenuConstant from '@/constant/MenuConstant'
 
 const props = defineProps({
   searchPageListRef: { type: Object, required: true },
@@ -40,7 +41,7 @@ const handleEditSubmit = async (data: MenuInfo | undefined) => {
 
         <el-col :span="12">
           <el-form-item label="父级菜单">
-            <MenuSelect v-model="editData.parentId" :menu-list="menuList" placeholder="顶级菜单"/>
+            <MenuSelect v-model="editData.parentId" :menu-list="menuList" :placeholder="MenuConstant.ROOT_MENU_NAME"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">

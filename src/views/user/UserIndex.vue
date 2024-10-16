@@ -10,6 +10,10 @@ import { listContentByType } from '@/api/dict'
 import DictClassConstant from '@/constant/DictClassConstant'
 import DictSelect from '@/views/component/DictSelect.vue'
 import type { FormInstance } from 'element-plus'
+import DeptSelect from '@/views/component/DeptSelect.vue'
+import type { DictContent } from '@/entity/sys/DictContent'
+import type { DeptTreeResult } from '@/entity/au/Dept'
+import { DeptUtil } from '@/util/DeptUtil'
 
 const searchPageListRef = ref<FormInstance>({})
 const queryParams = ref<UserQuery>({
@@ -24,11 +28,17 @@ const queryParams = ref<UserQuery>({
 const editDialogVisible = ref(false)
 const editData = ref<UserInfo>()
 const dictContentList = ref<DictContent[]>()
+const deptList = ref<DeptTreeResult[]>()
 
 const getDataList = async (page: Page) => {
   const { data } = await userPage(page,queryParams.value)
   return data
 }
+
+const getDeptList = async () => {
+  deptList.value = await DeptUtil.getDeptTreeList()
+}
+
 /**
  * 点击详情按钮
  */
@@ -89,9 +99,8 @@ const getDictContentList= async ()=>{
   dictContentList.value = data
 }
 
-
 getDictContentList()
-
+getDeptList()
 </script>
 
 <template>
@@ -123,7 +132,7 @@ getDictContentList()
         </el-col>
         <el-col :span="6">
           <el-form-item label="部门">
-            <el-input v-model="queryParams.deptId" />
+            <DeptSelect v-model="queryParams.deptId" :dept-list="deptList" placeholder="组织机构" :clearable="true"/>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -155,7 +164,7 @@ getDictContentList()
       </template>
     </SearchPageList>
 <!--  新增修改  -->
-      <UserEditDialog :edit-data="editData"  v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" ></UserEditDialog>
+      <UserEditDialog :edit-data="editData"  v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" :dept-list="deptList"></UserEditDialog>
 
 <!--  详情dialog  -->
 

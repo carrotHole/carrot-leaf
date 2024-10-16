@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
-import type { MenuTreeResult } from '@/entity/au/Menu'
+
+import type { DeptTreeResult } from '@/entity/au/Dept'
 
 const props = defineProps<{
   clearable?: boolean|true
@@ -8,10 +9,10 @@ const props = defineProps<{
 }>()
 
 const data = defineModel<string>()
-const menuList = defineModel<MenuTreeResult[]>('menuList')
+const deptList = defineModel<DeptTreeResult[]>('deptList')
 const labelProps = {
-  label: (data: { menuName: string; }) => {
-    return data.menuName;
+  label: (data: { deptName: string; }) => {
+    return data.deptName;
   },
 }
 
@@ -21,10 +22,11 @@ const labelProps = {
   <el-tree-select
     :check-strictly="true"
     v-model="data"
-    :data="menuList"
+    :data="deptList"
     node-key="id"
     :placeholder="placeholder"
     :props="labelProps"
+    :clearable="clearable"
   >
   </el-tree-select>
 </template>

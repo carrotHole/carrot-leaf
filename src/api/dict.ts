@@ -1,6 +1,7 @@
 // 引入request
 import request from "@/api/request";
 import DictClassConstant from '@/constant/DictClassConstant'
+import type { DictContent } from '@/entity/sys/DictContent'
 
 const pathFormat = (dictClass: string) => {
   return DictClassConstant.SYS === dictClass ? 'Sys':''

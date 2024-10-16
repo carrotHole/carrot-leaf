@@ -3,7 +3,7 @@ export class Dept {
   // 部门名称
   deptName: string | undefined
   // 部门类型
-  deptType : number | undefined;
+  deptType : string | undefined;
   // 状态
   status: number | undefined;
   // 租户主键
@@ -16,7 +16,7 @@ export class Dept {
 export class DeptInfo extends Dept {
   // 排序
   sort: number | null | undefined
-  // 升级部门主键
+  // 上级部门主键
   parentId: string | undefined
   // 上级部门主键集合
   parentIds: string | undefined;
@@ -26,7 +26,7 @@ export class DeptInfo extends Dept {
   id: string | undefined
 }
 
-export class DeptResult extends Dept {
+export class DeptResult extends DeptInfo {
   // 部门类型值
   deptTypeValue: string | undefined
   // 状态值

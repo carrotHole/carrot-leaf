@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { userSave, userUpdate } from '@/api/user'
 import MessageUtil from '@/util/MessageUtil'
+import type { DeptTreeResult } from '@/entity/au/Dept'
+import DeptSelect from '@/views/component/DeptSelect.vue'
+
 
 const props = defineProps({
   searchPageListRef: {type: Object, required: true},
+  deptList: { type: Array<DeptTreeResult>, required: true },
 })
 
 const editData = defineModel<UserResult>('editData',{default:()=>{}});
@@ -37,7 +41,7 @@ const handleEditSubmit = async (data: UserInfo) => {
 
         <el-col :span="12">
           <el-form-item label="部门">
-            <el-input v-model="editData.deptId" />
+            <DeptSelect v-model="editData.deptId" :dept-list="deptList" placeholder="组织机构" />
           </el-form-item>
         </el-col>
         <el-col :span="12">

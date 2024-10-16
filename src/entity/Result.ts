@@ -5,8 +5,8 @@ interface Result{
   message: string
 }
 
-interface PageData{
-  records: any[]
+interface PageData<T>{
+  records: T[]
   pageNumber: number
   pageSize: number
   totalPage: number

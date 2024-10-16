@@ -5,7 +5,7 @@ import { MenuQuery, MenuInfo, MenuResult, MenuTreeResult } from '@/entity/au/Men
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import MenuEditDialog from './MenuEditDialog.vue'
 import AdminUtil from '@/util/AdminUtil'
-import { getMenuTree, removeMenu } from '@/api/menu'
+import { removeMenu } from '@/api/menu'
 import BeanUtil from '@/util/BeanUtil'
 import MessageUtil from '@/util/MessageUtil'
 import type { FormInstance } from 'element-plus'
@@ -33,9 +33,8 @@ const getDataList = async (page: Page) => {
   if (!queryParams.value?.projectId){
     return []
   }
-  // console.log(queryParams.value?.projectId)
-  const { data } = await getMenuTree(queryParams.value?.projectId)
-  menuList.value = MenuUtil.filterMenu(data)
+  const data = await MenuUtil.getMenuTreeList(queryParams.value?.projectId, true)
+  menuList.value = await MenuUtil.formatSelectorTree(queryParams.value?.projectId)
   return data
 }
 
@@ -121,7 +120,7 @@ onMounted(async ()=>{
 
 <template>
   <div>
-    <SearchPageList :get-data-list="getDataList" title="菜单树" ref="searchPageListRef" :showPage="false" :showResetButton="false" :showSearchButton="false">
+    <SearchPageList :get-data-list="getDataList" title="菜单" ref="searchPageListRef" :showPage="false" :showResetButton="false" :showSearchButton="false">
       <template #search>
         <el-col :span="6">
           <el-form-item label="所属应用">
