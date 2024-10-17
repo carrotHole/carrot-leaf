@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
   /**
    * 获取数据列表
    */
-  getDataList:(page: Page, refresh: boolean)=>PageData<>
+  getDataList:(page: Page, refresh: boolean)=>PageData
 }>(), {
   title: '',
   showSearch: true,

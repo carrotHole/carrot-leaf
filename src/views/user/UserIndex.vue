@@ -40,7 +40,7 @@ const getDeptList = async () => {
 }
 
 /**
- * 点击详情按钮
+ * 点击编辑
  */
 const handleEdit = (user : UserInfo) => {
   editData.value = BeanUtil.deepCopy(user)

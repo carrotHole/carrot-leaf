@@ -32,7 +32,7 @@ const routers = [
       {
         name: '角色',
         path: '/role',
-        component: () => import('@/views/menu/MenuIndex.vue')
+        component: () => import('@/views/role/RoleIndex.vue')
       },
       {
         name: '菜单',
