@@ -70,3 +70,60 @@ export class RoleInfo extends Role{
 export class RoleResult extends RoleInfo{
   statusValue: string | undefined;
 }
+
+/**
+ * 角色权限
+ */
+export class RoleAuthority{
+
+  constructor() {
+  }
+
+  id:string | undefined
+  roleId:string | undefined
+  auMenu:number = 1
+  auRangeList:Array<number> = [1]
+}
+
+/**
+ * 角色权限范围
+ */
+export class RoleAuthorityResult {
+  constructor() {
+  }
+  roleAuthority : RoleAuthority = new RoleAuthority()
+  deptIdList : String[] = []
+}
+
+/**
+ * 角色菜单权限
+ */
+export class RoleMenuAuthority{
+  constructor() {
+  }
+
+  id:string | undefined
+  roleId:string | undefined
+  menuId:string | undefined
+  auRange:number | undefined
+  useDefault:number | undefined
+}
+
+/**
+ * 角色菜单权限范围
+ */
+export class RoleMenuAuthorityResult {
+
+  constructor() {
+  }
+
+  roleMenuAuthority: RoleMenuAuthority|undefined
+  deptIdList : String[] | undefined
+
+}
+
+export class RoleAuthorityGroup extends RoleAuthorityResult{
+
+  roleMenuAuthorityList : Array<RoleAuthorityResult>  = []
+
+}

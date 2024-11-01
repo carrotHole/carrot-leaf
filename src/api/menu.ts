@@ -12,6 +12,15 @@ export const getMenuTree = (projectId: string) => {
 
 
 /**
+ * 获取应用下所有菜单树
+ * @param projectId
+ */
+export const getCatalogMenuTree = (projectId: string) => {
+  return request.get<Result>(`/carrot/auMenu/catalogMenuTree/${projectId}`)
+}
+
+
+/**
  * 新增菜单
  */
 export const saveMenu = (data: MenuInfo) => {

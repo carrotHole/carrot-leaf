@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import SearchPageList from '@/views/component/SearchPageList.vue'
 import RoleEditDialog from './RoleEditDialog.vue'
+import RoleAuthorizeDialog from './RoleAuthorizeDialog.vue'
 import { ref, shallowRef } from 'vue'
-import { roleRemove, rolePage, roleUpdateStatus } from '@/api/role'
+import { roleRemove, rolePage, roleUpdateStatus, getAuthority } from '@/api/role'
 import MessageUtil from '@/util/MessageUtil'
 import AdminUtil from '@/util/AdminUtil'
 import BeanUtil from '@/util/BeanUtil'
@@ -14,7 +15,9 @@ import DeptSelect from '@/views/component/DeptSelect.vue'
 import type { DictContent } from '@/entity/sys/DictContent'
 import type { DeptTreeResult } from '@/entity/au/Dept'
 import { DeptUtil } from '@/util/DeptUtil'
-import { RoleInfo, RoleQuery } from '@/entity/au/Role'
+import { RoleAuthority, RoleAuthorityGroup, RoleInfo, RoleQuery } from '@/entity/au/Role'
+import  { MenuTreeResult } from '@/entity/au/Menu'
+import { MenuUtil } from '@/util/MenuUtil'
 
 const searchPageListRef = ref<FormInstance>({})
 const queryParams = ref<RoleQuery>(new RoleQuery())
@@ -22,7 +25,9 @@ const editDialogVisible = ref(false)
 const authorizeDialogVisible = ref(false)
 const editData = ref<RoleInfo>()
 const dictContentList = ref<DictContent[]>()
-const deptList = ref<DeptTreeResult[]>()
+const deptTreeList = ref<DeptTreeResult[]>()
+const menuTree = shallowRef<MenuTreeResult[]>()
+const authorizeGroup = ref<RoleAuthorityGroup>()
 
 const getDataList = async (page: Page) => {
   const { data } = await rolePage(page,queryParams.value)
@@ -30,7 +35,7 @@ const getDataList = async (page: Page) => {
 }
 
 const getDeptList = async () => {
-  deptList.value = await DeptUtil.getDeptTreeList()
+  deptTreeList.value = await DeptUtil.getDeptTreeList()
 }
 
 /**
@@ -60,8 +65,25 @@ const handDelete = async (data: RoleInfo) => {
 /**
  * 点击授权按钮
  */
-const handAuthrize = (role: RoleInfo) => {
+const handAuthorize = async (role: RoleInfo) => {
+  if (!role.id || !role.projectId ){
+    return
+  }
+
   editData.value = role
+  // 获取角色授权信息
+  const {data} = await getAuthority(role.id)
+  if (data && !data.roleAuthority){
+    data.roleAuthority = new RoleAuthority()
+    data.roleAuthority.roleId = role.id
+    data.deptList = []
+    data.menuAuthorityList = []
+  }
+
+  authorizeGroup.value = data
+  // 获取菜单树
+  menuTree.value = await MenuUtil.getCatalogMenuTreeList(role.projectId)
+
   authorizeDialogVisible.value = true
 }
 
@@ -115,7 +137,7 @@ getDeptList()
         </el-col>
         <el-col :span="6">
           <el-form-item label="组织机构">
-            <DeptSelect v-model="queryParams.deptId" :dept-list="deptList" placeholder="组织机构" :clearable="true"/>
+            <DeptSelect v-model="queryParams.deptId" :dept-list="deptTreeList" placeholder="组织机构" :clearable="true"/>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -150,7 +172,7 @@ getDeptList()
             <el-button-group>
               <el-button @click="handleEdit(row)" text type="primary" >编辑</el-button>
               <el-button @click="handDelete(row)" text type="danger">删除</el-button>
-              <el-button @click="handAuthrize(row)" text type="success">授权</el-button>
+              <el-button @click="handAuthorize(row)" text type="success">授权</el-button>
               <el-button @click="handleUpdateStatus(row,0,'禁用')" text v-if="row.status == 1 ">禁用</el-button>
               <el-button @click="handleUpdateStatus(row, 1, '解禁')" text v-if="row.status !== 1 && row.menuRange !== 0">解禁</el-button>
             </el-button-group>
@@ -160,9 +182,10 @@ getDeptList()
       </template>
     </SearchPageList>
     <!--  新增修改  -->
-    <RoleEditDialog :edit-data="editData"  v-model="editDialogVisible" :search-page-list-ref="searchPageListRef" :dept-list="deptList"></RoleEditDialog>
+    <RoleEditDialog :edit-data="editData"  v-model="editDialogVisible" :search-page-list-ref="searchPageListRef"></RoleEditDialog>
 
-    <!--  详情dialog  -->
+    <!--  授权dialog  -->
+    <RoleAuthorizeDialog v-model="authorizeDialogVisible" :deptTreeList="deptTreeList" :menuTree="menuTree" :authorizeGroup="authorizeGroup" :editData="editData"></RoleAuthorizeDialog>
 
   </div>
 </template>

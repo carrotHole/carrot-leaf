@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { roleSave, roleUpdate } from '@/api/role'
 import MessageUtil from '@/util/MessageUtil'
-import type { DeptTreeResult } from '@/entity/au/Dept'
 import {RoleInfo, RoleResult } from '@/entity/au/Role'
 
 
 const props = defineProps({
   searchPageListRef: {type: Object, required: true},
-  deptList: { type: Array<DeptTreeResult>, required: true },
 })
 
 const editData = defineModel<RoleResult>('editData',{default:()=>{}});

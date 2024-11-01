@@ -1,12 +1,13 @@
 import { MenuTreeResult } from '@/entity/au/Menu'
 import BeanUtil from '@/util/BeanUtil'
 import MenuConstant from '@/constant/MenuConstant'
-import { getMenuTree } from '@/api/menu'
+import { getCatalogMenuTree, getMenuTree } from '@/api/menu'
 
 
 export class MenuUtil {
 
   private static menuTreeMap: Map<string, MenuTreeResult[]> = new Map<string, MenuTreeResult[]>()
+  private static catalogMenuTree: Map<string, MenuTreeResult[]> = new Map<string, MenuTreeResult[]>()
 
   public static getMenuTreeList = async (projectId: string, refresh: boolean=false) => {
     const menuList = MenuUtil.menuTreeMap.get(projectId)
@@ -52,4 +53,17 @@ export class MenuUtil {
 
     return [rootMenu]
   }
+
+  public static getCatalogMenuTreeList = async (projectId: string, refresh: boolean=false) => {
+    const menuList = MenuUtil.menuTreeMap.get(projectId)
+    if (!refresh && menuList && Array.isArray(menuList) && menuList.length > 0) {
+      return menuList
+    }
+
+    const res = await getMenuTree(projectId)
+    MenuUtil.menuTreeMap.set(projectId, res.data)
+    return res.data
+  }
+
+
 }
